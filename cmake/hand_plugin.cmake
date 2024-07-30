@@ -59,10 +59,10 @@ function(hand_plugin)
         ${CMAKE_CURRENT_BINARY_DIR}/include/config/config.hxx
         )
 
-    target_include_directories(hand INTERFACE ${CMAKE_CURRENT_BINARY_DIR}/include)
+    target_include_directories(Hand INTERFACE ${CMAKE_CURRENT_BINARY_DIR}/include)
 
     target_compile_definitions(
-        hand
+        Hand
         INTERFACE PLUGIN_ID="${PLUGIN_ID}"
                   PLUGIN_NAME="${PLUGIN_NAME}"
                   PLUGIN_VENDOR="${PLUGIN_VENDOR}"

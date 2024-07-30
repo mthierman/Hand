@@ -1,22 +1,22 @@
 cmake_minimum_required(VERSION 3.30)
 
-project(hand VERSION 0.0.0)
+project(Hand VERSION 0.0.0)
 
 include(cmake/deps.cmake)
 
 add_library(
-    hand
+    Hand
     INTERFACE
     )
 
 add_library(
     hand::hand
     ALIAS
-    hand
+    Hand
     )
 
 target_sources(
-    hand
+    Hand
     INTERFACE FILE_SET
               HEADERS
               BASE_DIRS
@@ -24,7 +24,7 @@ target_sources(
     )
 
 target_link_libraries(
-    hand
+    Hand
     INTERFACE free-audio::clap
               free-audio::clap-helpers
     )
@@ -33,16 +33,16 @@ if(CMAKE_SYSTEM_NAME
    STREQUAL
    "Windows"
     )
-    target_link_libraries(hand INTERFACE glow::glow)
+    target_link_libraries(Hand INTERFACE glow::glow)
 
     target_compile_features(
-        hand
+        Hand
         INTERFACE c_std_17
                   cxx_std_23
         )
 
     target_compile_options(
-        hand
+        Hand
         INTERFACE $<$<CXX_COMPILER_FRONTEND_VARIANT:MSVC>:
                   /W4
                   /WX
@@ -64,7 +64,7 @@ if(CMAKE_SYSTEM_NAME
         )
 
     target_link_options(
-        hand
+        Hand
         INTERFACE
         $<$<CXX_COMPILER_FRONTEND_VARIANT:MSVC>:
         /WX
@@ -75,7 +75,7 @@ if(CMAKE_SYSTEM_NAME
         )
 
     target_compile_definitions(
-        hand
+        Hand
         INTERFACE NOMINMAX
                   WIN32_LEAN_AND_MEAN
                   PLATFORM_WINDOWS=1
