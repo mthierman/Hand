@@ -1,3 +1,5 @@
+cmake_minimum_required(VERSION 3.30)
+
 project(hand VERSION 0.0.0)
 
 include(cmake/deps.cmake)
@@ -37,10 +39,10 @@ if(CMAKE_SYSTEM_NAME
    STREQUAL
    "Windows"
     )
-    target_link_libraries(plugin INTERFACE glow::glow)
+    target_link_libraries(hand INTERFACE glow::glow)
 
     target_compile_options(
-        plugin
+        hand
         INTERFACE $<$<CXX_COMPILER_FRONTEND_VARIANT:MSVC>:
                   /W4
                   /WX
@@ -62,7 +64,7 @@ if(CMAKE_SYSTEM_NAME
         )
 
     target_link_options(
-        plugin
+        hand
         INTERFACE
         $<$<CXX_COMPILER_FRONTEND_VARIANT:MSVC>:
         /WX
@@ -73,7 +75,7 @@ if(CMAKE_SYSTEM_NAME
         )
 
     target_compile_definitions(
-        plugin
+        hand
         INTERFACE NOMINMAX
                   WIN32_LEAN_AND_MEAN
                   PLATFORM_WINDOWS=1
@@ -144,10 +146,10 @@ function(clap_add_plugin)
         ${CMAKE_CURRENT_BINARY_DIR}/include/config/config.hxx
         )
 
-    target_include_directories(plugin INTERFACE ${CMAKE_CURRENT_BINARY_DIR}/include)
+    target_include_directories(hand INTERFACE ${CMAKE_CURRENT_BINARY_DIR}/include)
 
     target_compile_definitions(
-        plugin
+        hand
         INTERFACE PLUGIN_ID="${PLUGIN_ID}"
                   PLUGIN_NAME="${PLUGIN_NAME}"
                   PLUGIN_VENDOR="${PLUGIN_VENDOR}"
@@ -173,7 +175,7 @@ function(clap_add_plugin)
 
     target_sources(${PLUGIN_NAME} PRIVATE ${PLUGIN_SOURCES})
 
-    target_link_libraries(${PLUGIN_NAME} PRIVATE plugin::plugin)
+    target_link_libraries(${PLUGIN_NAME} PRIVATE hand::hand)
 
     if(CMAKE_SYSTEM_NAME
        STREQUAL
