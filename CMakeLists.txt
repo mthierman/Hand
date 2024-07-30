@@ -17,8 +17,6 @@ add_library(
 
 target_sources(
     hand
-    PRIVATE "src/include/plugin/plugin.hxx"
-            "src/include/plugin/win32.hxx"
     INTERFACE FILE_SET
               HEADERS
               BASE_DIRS
