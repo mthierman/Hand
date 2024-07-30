@@ -85,5 +85,27 @@ endif()
 include(cmake/hand_plugin.cmake)
 
 if(PROJECT_IS_TOP_LEVEL)
-    hand_plugin()
+    hand_plugin(
+        NAME
+        "Example"
+        VERSION
+        "0.0.0"
+        DESCRIPTION
+        "Example plugin"
+        VENDOR
+        "Vendor"
+        ID
+        "com.vendor.example"
+        URL
+        "https://cleveraudio.org/"
+        MANUAL_URL
+        "https://cleveraudio.org/"
+        SUPPORT_URL
+        "https://cleveraudio.org/"
+        SOURCES
+        "example/example.cxx"
+        FEATURES
+        "audio-effect"
+        "utility"
+        )
 endif()
