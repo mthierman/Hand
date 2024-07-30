@@ -1,0 +1,6 @@
+.vscode
+.wix
+build
+node_modules
+
+CMakeUserPresets.json
