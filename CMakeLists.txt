@@ -25,8 +25,7 @@ target_sources(
 
 target_link_libraries(
     hand
-    INTERFACE common::compile_features
-              free-audio::clap
+    INTERFACE free-audio::clap
               free-audio::clap-helpers
     )
 
@@ -35,6 +34,12 @@ if(CMAKE_SYSTEM_NAME
    "Windows"
     )
     target_link_libraries(hand INTERFACE glow::glow)
+
+    target_compile_features(
+        hand
+        INTERFACE c_std_17
+                  cxx_std_23
+        )
 
     target_compile_options(
         hand
