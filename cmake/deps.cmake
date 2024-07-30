@@ -9,8 +9,6 @@ FetchContent_Declare(
 
 FetchContent_MakeAvailable(cmake-modules)
 
-include("${cmake-modules_SOURCE_DIR}/cmake-modules.cmake")
-
 fetch_glow(
     VERSION
     "next"
