@@ -30,7 +30,7 @@ target_link_libraries(
     INTERFACE common::compile_features
               common::compile_definitions
               common::compile_options
-              common::link_options
+              common::link_options_lib
               free-audio::clap
               free-audio::clap-helpers
     )
