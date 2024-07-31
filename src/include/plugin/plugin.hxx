@@ -39,9 +39,13 @@ clap_plugin_descriptor descriptor { .clap_version { CLAP_VERSION },
                                     .description { PLUGIN_DESCRIPTION },
                                     .features { plugin::features.data() } };
 
-template <typename T> std::function<T*()> instance;
-
-template <typename T> auto newInstance(const clap_host* host) -> T* { return new T(host); }
+template <typename T>
+std::function<const clap_plugin*(const clap_host*)> instance {
+    [](const clap_host* host) -> const clap_plugin* {
+    auto plugin = new T(host);
+    return plugin->clapPlugin();
+}
+};
 
 auto create(const clap_host_t* host) -> const clap_plugin*;
 

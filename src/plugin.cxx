@@ -7,6 +7,5 @@ struct ExamplePlugin final : public plugin::Helper<ExamplePlugin, plugin::Ignore
 };
 
 auto plugin::create(const clap_host_t* host) -> const clap_plugin* {
-    auto plugin = plugin::newInstance<ExamplePlugin>(host);
-    return plugin->clapPlugin();
+    return plugin::instance<ExamplePlugin>(host);
 }
