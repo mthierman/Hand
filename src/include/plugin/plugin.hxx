@@ -14,6 +14,51 @@
 #include <config/config.hxx>
 
 namespace plugin {
+Descriptor descriptor { .clap_version { CLAP_VERSION },
+                        .id { PLUGIN_ID },
+                        .name { PLUGIN_NAME },
+                        .vendor { PLUGIN_VENDOR },
+                        .url { PLUGIN_URL },
+                        .manual_url { PLUGIN_MANUAL_URL },
+                        .support_url { PLUGIN_SUPPORT_URL },
+                        .version { PLUGIN_VERSION },
+                        .description { PLUGIN_DESCRIPTION },
+                        .features { features.data() } };
+
+auto get_plugin_count(const clap_plugin_factory* /* factory */) -> uint32_t { return 1; }
+
+auto get_plugin_descriptor(const clap_plugin_factory* /* factory */,
+                           uint32_t /* index */) -> const clap_plugin_descriptor* {
+    return descriptor;
+}
+
+auto create_plugin(const struct clap_plugin_factory* /* factory */,
+                   const clap_host_t* host,
+                   const char* /* plugin_id */) -> const clap_plugin* {
+    auto plugin { new T(host) };
+    return plugin->clapPlugin();
+}
+
+Factory factory { .get_plugin_count { get_plugin_count },
+                  .get_plugin_descriptor { get_plugin_descriptor },
+                  .create_plugin { create_plugin } };
+
+auto init(const char* /* plugin_path */) -> bool { return true; }
+
+auto deinit(void) -> void { }
+
+auto get_factory(const char* factory_id) -> const void* {
+    return (factory_id != CLAP_PLUGIN_FACTORY_ID) ? factory : nullptr;
+}
+
+extern "C" {
+const CLAP_EXPORT plugin::Entry clap_entry {
+    .clap_version { CLAP_VERSION }, .init { init }, .deinit { deinit }, .get_factory { get_factory }
+};
+}
+} // namespace plugin
+
+namespace plugin {
 using TerminateMax = clap::helpers::Plugin<clap::helpers::MisbehaviourHandler::Terminate,
                                            clap::helpers::CheckingLevel::Maximal>;
 using TerminateMin = clap::helpers::Plugin<clap::helpers::MisbehaviourHandler::Terminate,
@@ -33,36 +78,6 @@ using Entry = clap_plugin_entry;
 
 using Parameters = std::unordered_map<clap_id, double*>;
 
-namespace factory {
-    template <typename T> auto getPluginCount(const clap_plugin_factory* /* factory */) -> uint32_t {
-        return 1;
-    }
-
-    template <typename T>
-    auto getPluginDescriptor(const clap_plugin_factory* /* factory */,
-                             uint32_t /* index */) -> const clap_plugin_descriptor* {
-        return &T::descriptor;
-    }
-
-    template <typename T>
-    auto createPlugin(const struct clap_plugin_factory* /* factory */,
-                      const clap_host_t* host,
-                      const char* /* plugin_id */) -> const clap_plugin* {
-        auto plugin { new T(host) };
-        return plugin->clapPlugin();
-    }
-} // namespace factory
-
-namespace entry {
-    template <typename T> auto init(const char* /* plugin_path */) -> bool { return true; }
-
-    template <typename T> auto deInit(void) -> void { }
-
-    template <typename T> auto getFactory(const char* factory_id) -> const void* {
-        return (factory_id != CLAP_PLUGIN_FACTORY_ID) ? &T::factory : nullptr;
-    }
-}; // namespace entry
-
 template <typename T, typename Helper> struct PluginHelper : public Helper {
     PluginHelper(const clap_plugin_descriptor* desc, const clap_host* host)
         : Helper(desc, host) {
@@ -71,27 +86,6 @@ template <typename T, typename Helper> struct PluginHelper : public Helper {
                 = glow::filesystem::known_folder(FOLDERID_LocalAppData, { "template-clap-plugin" });
         }
     }
-
-    inline static const Descriptor descriptor { .clap_version { CLAP_VERSION },
-                                                .id { PLUGIN_ID },
-                                                .name { PLUGIN_NAME },
-                                                .vendor { PLUGIN_VENDOR },
-                                                .url { PLUGIN_URL },
-                                                .manual_url { PLUGIN_MANUAL_URL },
-                                                .support_url { PLUGIN_SUPPORT_URL },
-                                                .version { PLUGIN_VERSION },
-                                                .description { PLUGIN_DESCRIPTION },
-                                                .features { features.data() } };
-
-    inline static const Factory factory { .get_plugin_count { factory::getPluginCount<T> },
-                                          .get_plugin_descriptor {
-                                              factory::getPluginDescriptor<T> },
-                                          .create_plugin { factory::createPlugin<T> } };
-
-    inline static const Entry entry { .clap_version { CLAP_VERSION },
-                                      .init { entry::init<T> },
-                                      .deinit { entry::deInit<T> },
-                                      .get_factory { entry::getFactory<T> } };
 
     // params
     auto paramsCount() const noexcept -> uint32_t override {
@@ -194,7 +188,8 @@ template <typename T, typename Helper> struct PluginHelper : public Helper {
 
     auto guiDestroy() noexcept -> void override { m_window.close(); }
 
-    auto guiGetPreferredApi(const char** /* api */, bool* /* is_floating */) noexcept -> bool override {
+    auto guiGetPreferredApi(const char** /* api */,
+                            bool* /* is_floating */) noexcept -> bool override {
         return false;
     }
 
