@@ -52,24 +52,24 @@ target_compile_options(
               $<$<AND:$<CXX_COMPILER_ID:Clang>,$<CXX_COMPILER_FRONTEND_VARIANT:MSVC>>:
               /W4
               /WX
-              /nologo
-              /wd4100
-              /wd4127
-              /utf-8
-              /bigobj
-              /diagnostics:caret
-              /Zc:__cplusplus
               -Wno-braced-scalar-init
+              -Wno-extra-semi
+              -Wno-gnu-zero-variadic-macro-arguments
+              -Wno-language-extension-token
+              -Wno-microsoft-enum-value
               -Wno-nonportable-include-path
+              -Wno-unused-parameter
               >
               $<$<AND:$<CXX_COMPILER_ID:Clang>,$<CXX_COMPILER_FRONTEND_VARIANT:GNU>>:
               -Wall
               -Werror
-              -Wextra
-              -Wpedantic
-              -Wno-unused-parameter
               -Wno-braced-scalar-init
+              -Wno-extra-semi
+              -Wno-gnu-zero-variadic-macro-arguments
               -Wno-language-extension-token
+              -Wno-microsoft-enum-value
+              -Wno-nonportable-include-path
+              -Wno-unused-parameter
               >
     )
 
