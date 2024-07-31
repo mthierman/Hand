@@ -216,9 +216,9 @@ auto create_plugin(const struct clap_plugin_factory* factory,
                    const clap_host_t* host,
                    const char* plugin_id) -> const clap_plugin*;
 
-clap_plugin_factory clap_factory { .get_plugin_count { get_plugin_count },
-                                   .get_plugin_descriptor { get_plugin_descriptor },
-                                   .create_plugin { create_plugin } };
+// clap_plugin_factory clap_factory { .get_plugin_count { get_plugin_count },
+//                                    .get_plugin_descriptor { get_plugin_descriptor },
+//                                    .create_plugin { create_plugin } };
 } // namespace plugin::factory
 
 namespace plugin::entry {

@@ -93,4 +93,4 @@ endif()
 
 include(cmake/hand_plugin.cmake)
 
-# add_subdirectory(example)
+add_subdirectory(example)

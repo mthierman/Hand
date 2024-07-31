@@ -7,10 +7,6 @@ struct ExamplePlugin final : public plugin::Helper<ExamplePlugin, plugin::Ignore
         : plugin::Helper<ExamplePlugin, plugin::IgnoreNone>(host) { }
 };
 
-namespace {
-auto autoRR = testLambda();
-}
-
 auto plugin::create(plugin::Host host) -> plugin::Plugin {
     return plugin::make<ExamplePlugin>(host);
 }
