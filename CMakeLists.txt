@@ -25,14 +25,10 @@ target_sources(
 
 target_link_libraries(
     Hand
-    INTERFACE free-audio::clap
+    INTERFACE common::compile_features
+              common::link_options_lib
+              free-audio::clap
               free-audio::clap-helpers
-    )
-
-target_compile_features(
-    Hand
-    INTERFACE c_std_17
-              cxx_std_23
     )
 
 target_compile_options(
@@ -73,23 +69,21 @@ target_compile_options(
               >
     )
 
-target_link_options(
+target_compile_definitions(
     Hand
-    INTERFACE
-    $<$<CXX_COMPILER_FRONTEND_VARIANT:MSVC>:
-    /WX
-    /NOLOGO
-    >
-    $<$<CXX_COMPILER_FRONTEND_VARIANT:GNU>:
-    -Wl,/WX,/NOLOGO
-    >
+    INTERFACE $<$<CONFIG:Debug>:HOT_RELOAD=1>
+              DEV_URL="https://localhost:5173"
     )
 
 if(CMAKE_SYSTEM_NAME
    STREQUAL
    "Windows"
     )
-    target_link_libraries(Hand INTERFACE glow::glow)
+    target_link_libraries(
+        Hand
+        INTERFACE common::compile_definitions
+                  glow::glow
+        )
 
     target_compile_definitions(
         Hand
