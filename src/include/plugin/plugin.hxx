@@ -41,9 +41,9 @@ clap_plugin_descriptor descriptor { .clap_version { CLAP_VERSION },
 
 auto create(const clap_host_t* host) -> const clap_plugin*;
 
-template <typename T, typename Helper> struct PluginHelper : public Helper {
-    PluginHelper(const clap_host* host)
-        : Helper(&descriptor, host) {
+template <typename T, typename U> struct Helper : public U {
+    Helper(const clap_host* host)
+        : U(&descriptor, host) {
         if (PLATFORM_WINDOWS) {
             m_window.webViewEnvironment.m_userDataFolder
                 = glow::filesystem::known_folder(FOLDERID_LocalAppData, { "template-clap-plugin" });
