@@ -40,7 +40,10 @@ target_compile_options(
     INTERFACE $<$<CXX_COMPILER_FRONTEND_VARIANT:MSVC>:
               /W4
               /WX
-              # /wd4100 /wd4127
+              /MP
+              /nologo
+              /wd4100
+              /wd4127
               /utf-8
               /bigobj
               /diagnostics:caret
@@ -51,7 +54,8 @@ target_compile_options(
               -Werror
               -Wextra
               -Wpedantic
-              # -Wno-unused-parameter -Wno-braced-scalar-init
+              -Wno-unused-parameter
+              -Wno-braced-scalar-init
               >
     )
 
@@ -60,9 +64,10 @@ target_link_options(
     INTERFACE
     $<$<CXX_COMPILER_FRONTEND_VARIANT:MSVC>:
     /WX
+    /NOLOGO
     >
     $<$<CXX_COMPILER_FRONTEND_VARIANT:GNU>:
-    -Wl,/WX
+    -Wl,/WX,/NOLOGO
     >
     )
 
