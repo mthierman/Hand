@@ -8,7 +8,7 @@
 namespace plugin {
 struct Window final : glow::window::Window {
     Window() {
-        message(WM_CREATE, [this](glow::messages::wm_create message) {
+        message(WM_CREATE, [this](glow::messages::wm_create /* message */) {
             glow::window::set_position(m_hwnd.get(), 0, 0, 640, 480);
 
             if (!webViewEnvironment.m_environment) {
@@ -20,13 +20,13 @@ struct Window final : glow::window::Window {
             return 0;
         });
 
-        message(WM_WINDOWPOSCHANGED, [this](glow::messages::wm_windowposchanged message) {
+        message(WM_WINDOWPOSCHANGED, [this](glow::messages::wm_windowposchanged /* message */) {
             webView.put_bounds(m_hwnd.get());
 
             return 0;
         });
 
-        message(WM_DESTROY, [this](glow::messages::wm message) {
+        message(WM_DESTROY, [this](glow::messages::wm /* message */) {
             webView.close();
             webViewEnvironment.close();
 

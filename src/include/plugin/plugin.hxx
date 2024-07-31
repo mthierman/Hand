@@ -34,27 +34,27 @@ using Entry = clap_plugin_entry;
 using Parameters = std::unordered_map<clap_id, double*>;
 
 namespace factory {
-    template <typename T> auto getPluginCount(const clap_plugin_factory* factory) -> uint32_t {
+    template <typename T> auto getPluginCount(const clap_plugin_factory* /* factory */) -> uint32_t {
         return 1;
     }
 
     template <typename T>
-    auto getPluginDescriptor(const clap_plugin_factory* factory,
-                             uint32_t index) -> const clap_plugin_descriptor* {
+    auto getPluginDescriptor(const clap_plugin_factory* /* factory */,
+                             uint32_t /* index */) -> const clap_plugin_descriptor* {
         return &T::descriptor;
     }
 
     template <typename T>
-    auto createPlugin(const struct clap_plugin_factory* factory,
+    auto createPlugin(const struct clap_plugin_factory* /* factory */,
                       const clap_host_t* host,
-                      const char* plugin_id) -> const clap_plugin* {
+                      const char* /* plugin_id */) -> const clap_plugin* {
         auto plugin { new T(host) };
         return plugin->clapPlugin();
     }
 } // namespace factory
 
 namespace entry {
-    template <typename T> auto init(const char* plugin_path) -> bool { return true; }
+    template <typename T> auto init(const char* /* plugin_path */) -> bool { return true; }
 
     template <typename T> auto deInit(void) -> void { }
 
@@ -113,7 +113,7 @@ template <typename T, typename Helper> struct PluginHelper : public Helper {
         return false;
     }
 
-    auto guiCreate(const char* api, bool isFloating) noexcept -> bool override {
+    auto guiCreate(const char* /* api */, bool /* isFloating */) noexcept -> bool override {
         if (PLATFORM_WINDOWS) {
             m_window.create();
 
@@ -194,14 +194,14 @@ template <typename T, typename Helper> struct PluginHelper : public Helper {
 
     auto guiDestroy() noexcept -> void override { m_window.close(); }
 
-    auto guiGetPreferredApi(const char** api, bool* is_floating) noexcept -> bool override {
+    auto guiGetPreferredApi(const char** /* api */, bool* /* is_floating */) noexcept -> bool override {
         return false;
     }
 
     // audio ports
-    auto audioPortsCount(bool isInput) const noexcept -> uint32_t override { return 1; }
+    auto audioPortsCount(bool /* isInput */) const noexcept -> uint32_t override { return 1; }
     auto audioPortsInfo(uint32_t index,
-                        bool isInput,
+                        bool /* isInput */,
                         clap_audio_port_info* info) const noexcept -> bool override {
         if (index > 0)
             return false;
@@ -215,9 +215,9 @@ template <typename T, typename Helper> struct PluginHelper : public Helper {
     }
 
     // note ports
-    auto notePortsCount(bool isInput) const noexcept -> uint32_t override { return 1; }
+    auto notePortsCount(bool /* isInput */) const noexcept -> uint32_t override { return 1; }
     auto notePortsInfo(uint32_t index,
-                       bool isInput,
+                       bool /* isInput */,
                        clap_note_port_info* info) const noexcept -> bool override {
         if (index > 0)
             return false;
