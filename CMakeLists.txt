@@ -91,8 +91,6 @@ if(CMAKE_SYSTEM_NAME
                   WIN32_LEAN_AND_MEAN
                   PLATFORM_WINDOWS=1
                   OPERATING_SYSTEM="Windows"
-                  $<$<CONFIG:Debug>:HOT_RELOAD=1>
-                  DEV_URL="https://localhost:5173"
         )
 endif()
 
