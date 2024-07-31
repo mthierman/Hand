@@ -14,6 +14,8 @@
 #include <config/config.hxx>
 
 namespace plugin {
+std::function<const clap_plugin*()> create_plugin_callback = []() { return nullptr; };
+
 Descriptor descriptor { .clap_version { CLAP_VERSION },
                         .id { PLUGIN_ID },
                         .name { PLUGIN_NAME },
@@ -35,8 +37,9 @@ auto get_plugin_descriptor(const clap_plugin_factory* /* factory */,
 auto create_plugin(const struct clap_plugin_factory* /* factory */,
                    const clap_host_t* host,
                    const char* /* plugin_id */) -> const clap_plugin* {
-    auto plugin { new T(host) };
-    return plugin->clapPlugin();
+    create_plugin_callback();
+    // auto plugin { new T(host) };
+    // return plugin->clapPlugin();
 }
 
 Factory factory { .get_plugin_count { get_plugin_count },
@@ -79,8 +82,8 @@ using Entry = clap_plugin_entry;
 using Parameters = std::unordered_map<clap_id, double*>;
 
 template <typename T, typename Helper> struct PluginHelper : public Helper {
-    PluginHelper(const clap_plugin_descriptor* desc, const clap_host* host)
-        : Helper(desc, host) {
+    PluginHelper(const clap_host* host)
+        : Helper(&plugin::descriptor, host) {
         if (PLATFORM_WINDOWS) {
             m_window.webViewEnvironment.m_userDataFolder
                 = glow::filesystem::known_folder(FOLDERID_LocalAppData, { "template-clap-plugin" });
