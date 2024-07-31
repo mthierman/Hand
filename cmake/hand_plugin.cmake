@@ -29,12 +29,14 @@ function(hand_plugin)
                 OUTPUT_VARIABLE
                 PLUGIN_FEATURES
         )
+    list(APPEND PLUGIN_FEATURES "static_cast<const char*>(nullptr)")
     list(
         JOIN
         PLUGIN_FEATURES
         ", "
         PLUGIN_FEATURES
         )
+
 
     if(NOT
        PLUGIN_NAME
@@ -71,7 +73,7 @@ function(hand_plugin)
                   PLUGIN_SUPPORT_URL="${PLUGIN_SUPPORT_URL}"
                   PLUGIN_VERSION="${PLUGIN_VERSION}"
                   PLUGIN_DESCRIPTION="${PLUGIN_DESCRIPTION}"
-                  PLUGIN_FEATURES="${PLUGIN_FEATURE_LIST}"
+                  PLUGIN_FEATURES=${PLUGIN_FEATURES}
         )
 
     add_library(
