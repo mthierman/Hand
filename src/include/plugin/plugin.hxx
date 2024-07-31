@@ -39,6 +39,10 @@ clap_plugin_descriptor descriptor { .clap_version { CLAP_VERSION },
                                     .description { PLUGIN_DESCRIPTION },
                                     .features { plugin::features.data() } };
 
+template <typename T> std::function<T*()> instance;
+
+template <typename T> auto newInstance(const clap_host* host) -> T* { return new T(host); }
+
 auto create(const clap_host_t* host) -> const clap_plugin*;
 
 template <typename T, typename U> struct Helper : public U {
