@@ -87,9 +87,7 @@ if(CMAKE_SYSTEM_NAME
 
     target_compile_definitions(
         Hand
-        INTERFACE NOMINMAX
-                  WIN32_LEAN_AND_MEAN
-                  PLATFORM_WINDOWS=1
+        INTERFACE PLATFORM_WINDOWS=1
                   OPERATING_SYSTEM="Windows"
         )
 endif()
