@@ -37,7 +37,7 @@ target_compile_features(
 
 target_compile_options(
     Hand
-    INTERFACE $<$<CXX_COMPILER_FRONTEND_VARIANT:MSVC>:
+    INTERFACE $<$<CXX_COMPILER_ID:MSVC>:
               /W4
               /WX
               /MP
@@ -49,7 +49,19 @@ target_compile_options(
               /diagnostics:caret
               /Zc:__cplusplus
               >
-              $<$<CXX_COMPILER_FRONTEND_VARIANT:GNU>:
+              $<$<AND:$<CXX_COMPILER_ID:Clang>,$<CXX_COMPILER_FRONTEND_VARIANT:MSVC>>:
+              /W4
+              /WX
+              /MP
+              /nologo
+              /wd4100
+              /wd4127
+              /utf-8
+              /bigobj
+              /diagnostics:caret
+              /Zc:__cplusplus
+              >
+              $<$<AND:$<CXX_COMPILER_ID:Clang>,$<CXX_COMPILER_FRONTEND_VARIANT:GNU>>:
               -Wall
               -Werror
               -Wextra
