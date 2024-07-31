@@ -8,6 +8,6 @@ struct Plugin final : public plugin::PluginHelper<Plugin, plugin::IgnoreNone> {
 };
 
 extern "C" {
-const CLAP_EXPORT plugin::Entry clap_entry { Plugin::entry };
+const CLAP_EXPORT plugin::Entry clap_entry { plugins::gain::Plugin::entry };
 }
 } // namespace plugins::gain

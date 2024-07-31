@@ -52,7 +52,6 @@ target_compile_options(
               $<$<AND:$<CXX_COMPILER_ID:Clang>,$<CXX_COMPILER_FRONTEND_VARIANT:MSVC>>:
               /W4
               /WX
-              /MP
               /nologo
               /wd4100
               /wd4127
@@ -60,6 +59,8 @@ target_compile_options(
               /bigobj
               /diagnostics:caret
               /Zc:__cplusplus
+              -Wno-braced-scalar-init
+              -Wno-nonportable-include-path
               >
               $<$<AND:$<CXX_COMPILER_ID:Clang>,$<CXX_COMPILER_FRONTEND_VARIANT:GNU>>:
               -Wall
