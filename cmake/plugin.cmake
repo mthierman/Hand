@@ -1,0 +1,10 @@
+if(PROJECT_IS_TOP_LEVEL)
+    hand_plugin(
+        ID
+        "com.vendor.plugin"
+        NAME
+        "Plugin"
+        SOURCES
+        "src/plugin.cxx"
+        )
+endif()
