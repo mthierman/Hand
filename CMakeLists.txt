@@ -56,6 +56,7 @@ target_compile_options(
               -Wpedantic
               -Wno-unused-parameter
               -Wno-braced-scalar-init
+              -Wno-language-extension-token
               >
     )
 
