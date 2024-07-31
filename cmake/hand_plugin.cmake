@@ -1,13 +1,13 @@
 function(hand_plugin)
     set(args
-        NAME
-        VERSION
-        DESCRIPTION
-        VENDOR
         ID
+        NAME
+        VENDOR
         URL
         MANUAL_URL
         SUPPORT_URL
+        VERSION
+        DESCRIPTION
         )
     set(listArgs
         SOURCES
@@ -21,6 +21,18 @@ function(hand_plugin)
         ${ARGN}
         )
 
+    if(NOT
+       PLUGIN_ID
+        )
+        message(FATAL_ERROR "Plugin ID is mandatory")
+    endif()
+
+    if(NOT
+       PLUGIN_NAME
+        )
+        message(FATAL_ERROR "Plugin name is mandatory")
+    endif()
+
     list(
         TRANSFORM
         PLUGIN_FEATURES
@@ -29,32 +41,17 @@ function(hand_plugin)
                 OUTPUT_VARIABLE
                 PLUGIN_FEATURES
         )
-    list(APPEND PLUGIN_FEATURES "static_cast<const char*>(nullptr)")
+    list(
+        APPEND
+        PLUGIN_FEATURES
+        "static_cast<const char*>(nullptr)"
+        )
     list(
         JOIN
         PLUGIN_FEATURES
         ", "
         PLUGIN_FEATURES
         )
-
-
-    if(NOT
-       PLUGIN_NAME
-        )
-        message(FATAL_ERROR "Plugin name was not set")
-    endif()
-
-    if(NOT
-       PLUGIN_VENDOR
-        )
-        message(FATAL_ERROR "Plugin vendor was not set")
-    endif()
-
-    if(NOT
-       PLUGIN_ID
-        )
-        message(FATAL_ERROR "Plugin ID was not set")
-    endif()
 
     configure_file(
         ${CMAKE_CURRENT_FUNCTION_LIST_DIR}/config/config.hxx
@@ -73,7 +70,6 @@ function(hand_plugin)
                   PLUGIN_SUPPORT_URL="${PLUGIN_SUPPORT_URL}"
                   PLUGIN_VERSION="${PLUGIN_VERSION}"
                   PLUGIN_DESCRIPTION="${PLUGIN_DESCRIPTION}"
-                  PLUGIN_FEATURES=${PLUGIN_FEATURES}
         )
 
     add_library(
