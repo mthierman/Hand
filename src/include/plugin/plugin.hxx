@@ -14,54 +14,6 @@
 #include <config/config.hxx>
 
 namespace plugin {
-std::function<const clap_plugin*()> create_plugin_callback = []() { return nullptr; };
-
-Descriptor descriptor { .clap_version { CLAP_VERSION },
-                        .id { PLUGIN_ID },
-                        .name { PLUGIN_NAME },
-                        .vendor { PLUGIN_VENDOR },
-                        .url { PLUGIN_URL },
-                        .manual_url { PLUGIN_MANUAL_URL },
-                        .support_url { PLUGIN_SUPPORT_URL },
-                        .version { PLUGIN_VERSION },
-                        .description { PLUGIN_DESCRIPTION },
-                        .features { features.data() } };
-
-auto get_plugin_count(const clap_plugin_factory* /* factory */) -> uint32_t { return 1; }
-
-auto get_plugin_descriptor(const clap_plugin_factory* /* factory */,
-                           uint32_t /* index */) -> const clap_plugin_descriptor* {
-    return descriptor;
-}
-
-auto create_plugin(const struct clap_plugin_factory* /* factory */,
-                   const clap_host_t* host,
-                   const char* /* plugin_id */) -> const clap_plugin* {
-    create_plugin_callback();
-    // auto plugin { new T(host) };
-    // return plugin->clapPlugin();
-}
-
-Factory factory { .get_plugin_count { get_plugin_count },
-                  .get_plugin_descriptor { get_plugin_descriptor },
-                  .create_plugin { create_plugin } };
-
-auto init(const char* /* plugin_path */) -> bool { return true; }
-
-auto deinit(void) -> void { }
-
-auto get_factory(const char* factory_id) -> const void* {
-    return (factory_id != CLAP_PLUGIN_FACTORY_ID) ? factory : nullptr;
-}
-
-extern "C" {
-const CLAP_EXPORT plugin::Entry clap_entry {
-    .clap_version { CLAP_VERSION }, .init { init }, .deinit { deinit }, .get_factory { get_factory }
-};
-}
-} // namespace plugin
-
-namespace plugin {
 using TerminateMax = clap::helpers::Plugin<clap::helpers::MisbehaviourHandler::Terminate,
                                            clap::helpers::CheckingLevel::Maximal>;
 using TerminateMin = clap::helpers::Plugin<clap::helpers::MisbehaviourHandler::Terminate,
@@ -74,16 +26,54 @@ using IgnoreMin = clap::helpers::Plugin<clap::helpers::MisbehaviourHandler::Igno
                                         clap::helpers::CheckingLevel::Minimal>;
 using IgnoreNone = clap::helpers::Plugin<clap::helpers::MisbehaviourHandler::Ignore,
                                          clap::helpers::CheckingLevel::None>;
-
-using Descriptor = clap_plugin_descriptor;
-using Factory = clap_plugin_factory;
-using Entry = clap_plugin_entry;
-
 using Parameters = std::unordered_map<clap_id, double*>;
+
+std::function<const clap_plugin*()> create_plugin_callback = []() { return nullptr; };
+
+clap_plugin_descriptor descriptor { .clap_version { CLAP_VERSION },
+                                    .id { PLUGIN_ID },
+                                    .name { PLUGIN_NAME },
+                                    .vendor { PLUGIN_VENDOR },
+                                    .url { PLUGIN_URL },
+                                    .manual_url { PLUGIN_MANUAL_URL },
+                                    .support_url { PLUGIN_SUPPORT_URL },
+                                    .version { PLUGIN_VERSION },
+                                    .description { PLUGIN_DESCRIPTION },
+                                    .features { features.data() } };
+
+auto get_plugin_count(const clap_plugin_factory* /* factory */) -> uint32_t { return 1; }
+
+auto get_plugin_descriptor(const clap_plugin_factory* /* factory */,
+                           uint32_t /* index */) -> const clap_plugin_descriptor* {
+    return &descriptor;
+}
+
+auto create_plugin(const struct clap_plugin_factory* /* factory */,
+                   const clap_host_t* host,
+                   const char* /* plugin_id */) -> const clap_plugin* {
+    return create_plugin_callback();
+}
+
+clap_plugin_factory factory { .get_plugin_count { get_plugin_count },
+                              .get_plugin_descriptor { get_plugin_descriptor },
+                              .create_plugin { create_plugin } };
+
+auto init(const char* /* plugin_path */) -> bool { return true; }
+
+auto deinit(void) -> void { }
+
+auto get_factory(const char* factory_id) -> const void* {
+    return (factory_id != CLAP_PLUGIN_FACTORY_ID) ? &factory : nullptr;
+}
 
 template <typename T, typename Helper> struct PluginHelper : public Helper {
     PluginHelper(const clap_host* host)
-        : Helper(&plugin::descriptor, host) {
+        : Helper(&descriptor, host) {
+        create_plugin_callback = [host]() {
+            auto plugin { new T(host) };
+            return plugin->clapPlugin();
+        };
+
         if (PLATFORM_WINDOWS) {
             m_window.webViewEnvironment.m_userDataFolder
                 = glow::filesystem::known_folder(FOLDERID_LocalAppData, { "template-clap-plugin" });
@@ -266,3 +256,10 @@ namespace event {
     }
 } // namespace event
 } // namespace plugin
+
+extern "C" {
+const CLAP_EXPORT clap_plugin_entry clap_entry { .clap_version { CLAP_VERSION },
+                                                 .init { plugin::init },
+                                                 .deinit { plugin::deinit },
+                                                 .get_factory { plugin::get_factory } };
+}
