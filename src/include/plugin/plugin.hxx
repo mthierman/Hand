@@ -204,52 +204,17 @@ template <typename T, typename U> struct Helper : public U {
 namespace event {
     auto run_loop(const clap_process* process,
                   std::function<void(const clap_event_header* event)> eventHandler)
-        -> clap_process_status {
-        if (process->audio_outputs_count <= 0) {
-            return CLAP_PROCESS_SLEEP;
-        }
-
-        auto ev { process->in_events };
-        auto sz { ev->size(ev) };
-
-        const clap_event_header* nextEvent { nullptr };
-        clap_id nextEventIndex { 0 };
-        if (sz != 0) {
-            nextEvent = ev->get(ev, nextEventIndex);
-        }
-
-        for (uint32_t i { 0 }; i < process->frames_count; ++i) {
-            while (nextEvent && nextEvent->time == i) {
-                eventHandler(nextEvent);
-                nextEventIndex++;
-                if (nextEventIndex >= sz) {
-                    nextEvent = nullptr;
-                } else {
-                    nextEvent = ev->get(ev, nextEventIndex);
-                }
-            }
-        }
-
-        assert(!nextEvent);
-
-        return CLAP_PROCESS_SLEEP;
-    }
+        -> clap_process_status;
 } // namespace event
 } // namespace plugin
 
 namespace plugin::factory {
-auto get_plugin_count(const clap_plugin_factory* /* factory */) -> uint32_t { return 1; }
-
-auto get_plugin_descriptor(const clap_plugin_factory* /* factory */,
-                           uint32_t /* index */) -> const clap_plugin_descriptor* {
-    return &descriptor;
-}
-
-auto create_plugin(const struct clap_plugin_factory* /* factory */,
+auto get_plugin_count(const clap_plugin_factory* factory) -> uint32_t;
+auto get_plugin_descriptor(const clap_plugin_factory* factory,
+                           uint32_t index) -> const clap_plugin_descriptor*;
+auto create_plugin(const struct clap_plugin_factory* factory,
                    const clap_host_t* host,
-                   const char* /* plugin_id */) -> const clap_plugin* {
-    return plugin::create(host);
-}
+                   const char* plugin_id) -> const clap_plugin*;
 
 clap_plugin_factory clap_factory { .get_plugin_count { get_plugin_count },
                                    .get_plugin_descriptor { get_plugin_descriptor },
@@ -257,18 +222,7 @@ clap_plugin_factory clap_factory { .get_plugin_count { get_plugin_count },
 } // namespace plugin::factory
 
 namespace plugin::entry {
-auto init(const char* /* plugin_path */) -> bool { return true; }
-
-auto deinit(void) -> void { }
-
-auto get_factory(const char* factory_id) -> const void* {
-    return (factory_id != CLAP_PLUGIN_FACTORY_ID) ? &plugin::factory::clap_factory : nullptr;
-}
+auto init(const char* plugin_path) -> bool;
+auto deinit(void) -> void;
+auto get_factory(const char* factory_id) -> const void*;
 } // namespace plugin::entry
-
-extern "C" {
-const CLAP_EXPORT clap_plugin_entry clap_entry { .clap_version { CLAP_VERSION },
-                                                 .init { plugin::entry::init },
-                                                 .deinit { plugin::entry::deinit },
-                                                 .get_factory { plugin::entry::get_factory } };
-}

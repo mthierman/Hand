@@ -5,6 +5,6 @@ if(PROJECT_IS_TOP_LEVEL)
         NAME
         "Plugin"
         SOURCES
-        "src/plugin.cxx"
+        "example.cxx"
         )
 endif()

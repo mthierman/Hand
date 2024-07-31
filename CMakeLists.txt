@@ -4,10 +4,7 @@ project(Hand VERSION 0.0.0)
 
 include(cmake/deps.cmake)
 
-add_library(
-    Hand
-    INTERFACE
-    )
+add_library(Hand)
 
 add_library(
     hand::hand
@@ -17,62 +14,64 @@ add_library(
 
 target_sources(
     Hand
-    INTERFACE FILE_SET
-              HEADERS
-              BASE_DIRS
-              "src/include"
+    PRIVATE "src/plugin.cxx"
+            "src/win32.cxx"
+    PUBLIC FILE_SET
+           HEADERS
+           BASE_DIRS
+           "src/include"
     )
 
 target_link_libraries(
     Hand
-    INTERFACE common::compile_features
-              common::link_options_lib
-              free-audio::clap
-              free-audio::clap-helpers
+    PUBLIC common::compile_features
+           common::link_options_lib
+           free-audio::clap
+           free-audio::clap-helpers
     )
 
 target_compile_options(
     Hand
-    INTERFACE $<$<CXX_COMPILER_ID:MSVC>:
-              /W4
-              /WX
-              /MP
-              /nologo
-              /wd4100
-              /wd4127
-              /utf-8
-              /bigobj
-              /diagnostics:caret
-              /Zc:__cplusplus
-              >
-              $<$<AND:$<CXX_COMPILER_ID:Clang>,$<CXX_COMPILER_FRONTEND_VARIANT:MSVC>>:
-              /W4
-              /WX
-              -Wno-braced-scalar-init
-              -Wno-extra-semi
-              -Wno-gnu-zero-variadic-macro-arguments
-              -Wno-language-extension-token
-              -Wno-microsoft-enum-value
-              -Wno-nonportable-include-path
-              -Wno-unused-parameter
-              >
-              $<$<AND:$<CXX_COMPILER_ID:Clang>,$<CXX_COMPILER_FRONTEND_VARIANT:GNU>>:
-              -Wall
-              -Werror
-              -Wno-braced-scalar-init
-              -Wno-extra-semi
-              -Wno-gnu-zero-variadic-macro-arguments
-              -Wno-language-extension-token
-              -Wno-microsoft-enum-value
-              -Wno-nonportable-include-path
-              -Wno-unused-parameter
-              >
+    PUBLIC $<$<CXX_COMPILER_ID:MSVC>:
+           /W4
+           /WX
+           /MP
+           /nologo
+           /wd4100
+           /wd4127
+           /utf-8
+           /bigobj
+           /diagnostics:caret
+           /Zc:__cplusplus
+           >
+           $<$<AND:$<CXX_COMPILER_ID:Clang>,$<CXX_COMPILER_FRONTEND_VARIANT:MSVC>>:
+           /W4
+           /WX
+           -Wno-braced-scalar-init
+           -Wno-extra-semi
+           -Wno-gnu-zero-variadic-macro-arguments
+           -Wno-language-extension-token
+           -Wno-microsoft-enum-value
+           -Wno-nonportable-include-path
+           -Wno-unused-parameter
+           >
+           $<$<AND:$<CXX_COMPILER_ID:Clang>,$<CXX_COMPILER_FRONTEND_VARIANT:GNU>>:
+           -Wall
+           -Werror
+           -Wno-braced-scalar-init
+           -Wno-extra-semi
+           -Wno-gnu-zero-variadic-macro-arguments
+           -Wno-language-extension-token
+           -Wno-microsoft-enum-value
+           -Wno-nonportable-include-path
+           -Wno-unused-parameter
+           >
     )
 
 target_compile_definitions(
     Hand
-    INTERFACE $<$<CONFIG:Debug>:HOT_RELOAD=1>
-              DEV_URL="https://localhost:5173"
+    PUBLIC $<$<CONFIG:Debug>:HOT_RELOAD=1>
+           DEV_URL="https://localhost:5173"
     )
 
 if(CMAKE_SYSTEM_NAME
@@ -81,16 +80,17 @@ if(CMAKE_SYSTEM_NAME
     )
     target_link_libraries(
         Hand
-        INTERFACE common::compile_definitions
-                  glow::glow
+        PUBLIC common::compile_definitions
+               glow::glow
         )
 
     target_compile_definitions(
         Hand
-        INTERFACE PLATFORM_WINDOWS=1
-                  OPERATING_SYSTEM="Windows"
+        PUBLIC PLATFORM_WINDOWS=1
+               OPERATING_SYSTEM="Windows"
         )
 endif()
 
 include(cmake/hand_plugin.cmake)
-include(cmake/plugin.cmake)
+
+# add_subdirectory(example)

@@ -58,18 +58,18 @@ function(hand_plugin)
         ${CMAKE_CURRENT_BINARY_DIR}/include/config/config.hxx
         )
 
-    target_include_directories(Hand INTERFACE ${CMAKE_CURRENT_BINARY_DIR}/include)
+    target_include_directories(Hand PRIVATE ${CMAKE_CURRENT_BINARY_DIR}/include)
 
     target_compile_definitions(
         Hand
-        INTERFACE PLUGIN_ID="${PLUGIN_ID}"
-                  PLUGIN_NAME="${PLUGIN_NAME}"
-                  PLUGIN_VENDOR="${PLUGIN_VENDOR}"
-                  PLUGIN_URL="${PLUGIN_URL}"
-                  PLUGIN_MANUAL_URL="${PLUGIN_MANUAL_URL}"
-                  PLUGIN_SUPPORT_URL="${PLUGIN_SUPPORT_URL}"
-                  PLUGIN_VERSION="${PLUGIN_VERSION}"
-                  PLUGIN_DESCRIPTION="${PLUGIN_DESCRIPTION}"
+        PUBLIC PLUGIN_ID="${PLUGIN_ID}"
+               PLUGIN_NAME="${PLUGIN_NAME}"
+               PLUGIN_VENDOR="${PLUGIN_VENDOR}"
+               PLUGIN_URL="${PLUGIN_URL}"
+               PLUGIN_MANUAL_URL="${PLUGIN_MANUAL_URL}"
+               PLUGIN_SUPPORT_URL="${PLUGIN_SUPPORT_URL}"
+               PLUGIN_VERSION="${PLUGIN_VERSION}"
+               PLUGIN_DESCRIPTION="${PLUGIN_DESCRIPTION}"
         )
 
     add_library(
