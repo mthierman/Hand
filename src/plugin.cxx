@@ -6,6 +6,6 @@ struct ExamplePlugin final : public plugin::Helper<ExamplePlugin, plugin::Ignore
     ~ExamplePlugin() { }
 };
 
-auto plugin::create(const clap_host_t* host) -> const clap_plugin* {
-    return plugin::instance<ExamplePlugin>(host);
+auto plugin::create(plugin::Host host) -> plugin::Plugin {
+    return plugin::make<ExamplePlugin>(host);
 }

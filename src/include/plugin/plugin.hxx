@@ -27,6 +27,8 @@ using IgnoreMin = clap::helpers::Plugin<clap::helpers::MisbehaviourHandler::Igno
 using IgnoreNone = clap::helpers::Plugin<clap::helpers::MisbehaviourHandler::Ignore,
                                          clap::helpers::CheckingLevel::None>;
 using Parameters = std::unordered_map<clap_id, double*>;
+using Host = const clap_host*;
+using Plugin = const clap_plugin*;
 
 clap_plugin_descriptor descriptor { .clap_version { CLAP_VERSION },
                                     .id { PLUGIN_ID },
@@ -40,14 +42,14 @@ clap_plugin_descriptor descriptor { .clap_version { CLAP_VERSION },
                                     .features { plugin::features.data() } };
 
 template <typename T>
-std::function<const clap_plugin*(const clap_host*)> instance {
+std::function<const clap_plugin*(const clap_host*)> make {
     [](const clap_host* host) -> const clap_plugin* {
     auto plugin = new T(host);
     return plugin->clapPlugin();
 }
 };
 
-auto create(const clap_host_t* host) -> const clap_plugin*;
+auto create(Host host) -> Plugin;
 
 template <typename T, typename U> struct Helper : public U {
     Helper(const clap_host* host)
