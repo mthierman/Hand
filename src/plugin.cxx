@@ -59,7 +59,7 @@ auto get_plugin_descriptor(const clap_plugin_factory* /* factory */,
 auto create_plugin(const struct clap_plugin_factory* /* factory */,
                    const clap_host_t* host,
                    const char* /* plugin_id */) -> const clap_plugin* {
-    return plugin::create(&descriptor, host);
+    return plugin::create(host);
 }
 } // namespace plugin::factory
 
