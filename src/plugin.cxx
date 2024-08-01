@@ -13,6 +13,11 @@ const clap_plugin_descriptor clap_descriptor { .clap_version { CLAP_VERSION },
                                                .description { PLUGIN_DESCRIPTION },
                                                .features { plugin::features.data() } };
 
+const clap_plugin_factory clap_factory { .get_plugin_count { plugin::factory::get_plugin_count },
+                                         .get_plugin_descriptor {
+                                             plugin::factory::get_plugin_descriptor },
+                                         .create_plugin { plugin::factory::create_plugin } };
+
 namespace factory {
     auto get_plugin_count(const clap_plugin_factory* /* factory */) -> uint32_t { return 1; }
 
@@ -27,11 +32,6 @@ namespace factory {
         return plugin::create(host);
     }
 } // namespace factory
-
-clap_plugin_factory clap_factory { .get_plugin_count { plugin::factory::get_plugin_count },
-                                   .get_plugin_descriptor {
-                                       plugin::factory::get_plugin_descriptor },
-                                   .create_plugin { plugin::factory::create_plugin } };
 
 namespace entry {
     auto init(const char* /* plugin_path */) -> bool { return true; }

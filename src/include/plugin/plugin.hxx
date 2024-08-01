@@ -26,13 +26,14 @@ using IgnoreNone = clap::helpers::Plugin<clap::helpers::MisbehaviourHandler::Ign
                                          clap::helpers::CheckingLevel::None>;
 
 extern const clap_plugin_descriptor clap_descriptor;
+extern const clap_plugin_factory clap_factory;
 
 namespace factory {
     auto get_plugin_count(const clap_plugin_factory* factory) -> uint32_t;
     auto get_plugin_descriptor(const clap_plugin_factory* factory,
                                uint32_t index) -> const clap_plugin_descriptor*;
     auto create_plugin(const struct clap_plugin_factory* factory,
-                       const clap_host_t* host,
+                       const clap_host* host,
                        const char* plugin_id) -> const clap_plugin*;
 } // namespace factory
 
@@ -49,6 +50,14 @@ namespace event {
 } // namespace event
 
 auto create(const clap_host* host) -> const clap_plugin*;
+
+template <typename T>
+std::function<const clap_plugin*(const clap_host*)> make {
+    [](const clap_host* host) -> const clap_plugin* {
+    auto plugin = new T(host);
+    return plugin->clapPlugin();
+}
+};
 
 template <typename T, typename U> struct Helper : public U {
     Helper(const clap_host* host)
@@ -198,13 +207,5 @@ template <typename T, typename U> struct Helper : public U {
 
     std::unordered_map<clap_id, double*> m_params;
     plugin::Window m_window;
-};
-
-template <typename T>
-std::function<const clap_plugin*(const clap_host*)> make {
-    [](const clap_host* host) -> const clap_plugin* {
-    auto plugin = new T(host);
-    return plugin->clapPlugin();
-}
 };
 } // namespace plugin
