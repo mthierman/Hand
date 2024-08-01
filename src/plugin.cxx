@@ -1,6 +1,17 @@
 #include <plugin/plugin.hxx>
 
 namespace plugin {
+const clap_plugin_descriptor descriptor { .clap_version { CLAP_VERSION },
+                                          .id { PLUGIN_ID },
+                                          .name { PLUGIN_NAME },
+                                          .vendor { PLUGIN_VENDOR },
+                                          .url { PLUGIN_URL },
+                                          .manual_url { PLUGIN_MANUAL_URL },
+                                          .support_url { PLUGIN_SUPPORT_URL },
+                                          .version { PLUGIN_VERSION },
+                                          .description { PLUGIN_DESCRIPTION },
+                                          .features { plugin::features.data() } };
+
 namespace event {
     auto run_loop(const clap_process* process,
                   std::function<void(const clap_event_header* event)> eventHandler)
@@ -37,17 +48,6 @@ namespace event {
 } // namespace event
 } // namespace plugin
 
-clap_plugin_descriptor descriptor { .clap_version { CLAP_VERSION },
-                                    .id { PLUGIN_ID },
-                                    .name { PLUGIN_NAME },
-                                    .vendor { PLUGIN_VENDOR },
-                                    .url { PLUGIN_URL },
-                                    .manual_url { PLUGIN_MANUAL_URL },
-                                    .support_url { PLUGIN_SUPPORT_URL },
-                                    .version { PLUGIN_VERSION },
-                                    .description { PLUGIN_DESCRIPTION },
-                                    .features { plugin::features.data() } };
-
 namespace plugin::factory {
 auto get_plugin_count(const clap_plugin_factory* /* factory */) -> uint32_t { return 1; }
 
@@ -59,7 +59,7 @@ auto get_plugin_descriptor(const clap_plugin_factory* /* factory */,
 auto create_plugin(const struct clap_plugin_factory* /* factory */,
                    const clap_host_t* host,
                    const char* /* plugin_id */) -> const clap_plugin* {
-    return plugin::create(host);
+    return plugin::create(&descriptor, host);
 }
 } // namespace plugin::factory
 

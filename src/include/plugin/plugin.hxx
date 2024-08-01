@@ -14,6 +14,7 @@
 #include <config/config.hxx>
 
 namespace plugin {
+
 using TerminateMax = clap::helpers::Plugin<clap::helpers::MisbehaviourHandler::Terminate,
                                            clap::helpers::CheckingLevel::Maximal>;
 using TerminateMin = clap::helpers::Plugin<clap::helpers::MisbehaviourHandler::Terminate,
@@ -27,24 +28,22 @@ using IgnoreMin = clap::helpers::Plugin<clap::helpers::MisbehaviourHandler::Igno
 using IgnoreNone = clap::helpers::Plugin<clap::helpers::MisbehaviourHandler::Ignore,
                                          clap::helpers::CheckingLevel::None>;
 using Parameters = std::unordered_map<clap_id, double*>;
+
+using Descriptor = const clap_plugin_descriptor*;
 using Host = const clap_host*;
 using Plugin = const clap_plugin*;
 
 template <typename T>
-std::function<const clap_plugin*(const clap_host*)> make {
-    [](const clap_host* host) -> const clap_plugin* {
-    auto plugin = new T(host);
+std::function<Plugin(Descriptor, Host)> make { [](Descriptor descriptor, Host host) -> Plugin {
+    auto plugin = new T(descriptor, host);
     return plugin->clapPlugin();
-}
-};
+} };
 
-clap_plugin_descriptor descriptor;
-
-auto create(Host host) -> Plugin;
+auto create(Descriptor descriptor, Host host) -> Plugin;
 
 template <typename T, typename U> struct Helper : public U {
-    Helper(const clap_host* host)
-        : U(&descriptor, host) {
+    Helper(Descriptor descriptor, const clap_host* host)
+        : U(descriptor, host) {
         if (PLATFORM_WINDOWS) {
             m_window.webViewEnvironment.m_userDataFolder
                 = glow::filesystem::known_folder(FOLDERID_LocalAppData, { "template-clap-plugin" });
