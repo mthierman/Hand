@@ -7,4 +7,4 @@ struct ExamplePlugin final : public plugin::Helper<ExamplePlugin, plugin::Ignore
         : plugin::Helper<ExamplePlugin, plugin::IgnoreNone>(host) { }
 };
 
-auto registerPlugin = plugin::make<ExamplePlugin>();
+auto instance { plugin::make<ExamplePlugin>() };
