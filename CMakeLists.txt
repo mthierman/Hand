@@ -18,7 +18,6 @@ target_sources(
     PRIVATE "src/descriptor.cxx"
             "src/factory.cxx"
             "src/event.cxx"
-            "src/win32.cxx"
     PUBLIC FILE_SET
            HEADERS
            BASE_DIRS

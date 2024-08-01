@@ -63,9 +63,9 @@ template <typename T, typename U> struct Helper : public U {
 
     auto guiCreate(const char* /* api */, bool /* isFloating */) noexcept -> bool override {
         if (PLATFORM_WINDOWS) {
-            m_window.create();
+            // m_window.create();
 
-            return true;
+            return gui::create();
         }
 
         return false;
@@ -73,9 +73,9 @@ template <typename T, typename U> struct Helper : public U {
 
     auto guiSetScale(double scale) noexcept -> bool override {
         if (PLATFORM_WINDOWS) {
-            m_window.m_scale = scale;
+            // m_window.m_scale = scale;
 
-            return true;
+            return gui::setScale(scale);
         }
 
         return false;
@@ -89,9 +89,9 @@ template <typename T, typename U> struct Helper : public U {
 
     auto guiSetSize(uint32_t width, uint32_t height) noexcept -> bool override {
         if (PLATFORM_WINDOWS) {
-            glow::window::set_position(m_window.m_hwnd.get(), 0, 0, width, height);
+            // glow::window::set_position(m_window.m_hwnd.get(), 0, 0, width, height);
 
-            return true;
+            return gui::setSize(width, height;)
         }
 
         return true;
@@ -99,11 +99,11 @@ template <typename T, typename U> struct Helper : public U {
 
     auto guiGetSize(uint32_t* width, uint32_t* height) noexcept -> bool override {
         if (PLATFORM_WINDOWS) {
-            auto rect { glow::window::get_client_rect(m_window.m_hwnd.get()) };
-            *width = rect.right - rect.left;
-            *height = rect.bottom - rect.top;
+            // auto rect { glow::window::get_client_rect(m_window.m_hwnd.get()) };
+            // *width = rect.right - rect.left;
+            // *height = rect.bottom - rect.top;
 
-            return true;
+            return gui::getSize(width, height);
         }
 
         return false;
@@ -111,10 +111,10 @@ template <typename T, typename U> struct Helper : public U {
 
     auto guiSetParent(const clap_window* window) noexcept -> bool override {
         if (PLATFORM_WINDOWS) {
-            glow::window::set_style(m_window.m_hwnd.get(), WS_POPUP);
-            glow::window::set_parent(m_window.m_hwnd.get(), (::HWND)window->win32);
+            // glow::window::set_style(m_window.m_hwnd.get(), WS_POPUP);
+            // glow::window::set_parent(m_window.m_hwnd.get(), (::HWND)window->win32);
 
-            return true;
+            return gui::setParent(const clap_window* window);
         }
 
         return false;
@@ -122,9 +122,9 @@ template <typename T, typename U> struct Helper : public U {
 
     auto guiShow() noexcept -> bool override {
         if (PLATFORM_WINDOWS) {
-            glow::window::show(m_window.m_hwnd.get());
+            // glow::window::show(m_window.m_hwnd.get());
 
-            return true;
+            return gui::show();
         }
 
         return false;
@@ -132,15 +132,19 @@ template <typename T, typename U> struct Helper : public U {
 
     auto guiHide() noexcept -> bool override {
         if (PLATFORM_WINDOWS) {
-            glow::window::hide(m_window.m_hwnd.get());
+            // glow::window::hide(m_window.m_hwnd.get());
 
-            return true;
+            return gui::hide();
         }
 
         return false;
     }
 
-    auto guiDestroy() noexcept -> void override { m_window.close(); }
+    auto guiDestroy() noexcept -> void override {
+        //  m_window.close();
+
+        gui::destroy();
+    }
 
     auto guiGetPreferredApi(const char** /* api */,
                             bool* /* is_floating */) noexcept -> bool override {
