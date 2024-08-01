@@ -63,7 +63,7 @@ template <typename T, typename U> struct Helper : public U {
     Helper(const clap_host* host)
         : U(&clap_descriptor, host) { }
 
-    auto init() -> bool override {
+    auto init() noexcept -> bool override {
         if (PLATFORM_WINDOWS) {
             m_window.webViewEnvironment.m_userDataFolder
                 = glow::filesystem::known_folder(FOLDERID_LocalAppData, { "template-clap-plugin" });
