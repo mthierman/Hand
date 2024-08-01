@@ -93,6 +93,8 @@ if(CMAKE_SYSTEM_NAME
         PUBLIC PLATFORM_WINDOWS=1
                OPERATING_SYSTEM="Windows"
         )
+else()
+    target_sources(Hand PRIVATE "src/gui.cxx")
 endif()
 
 include(cmake/hand_plugin.cmake)
