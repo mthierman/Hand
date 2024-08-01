@@ -34,8 +34,9 @@ template <typename T, typename U> struct Helper : public U {
 
     auto init() noexcept -> bool override {
         if (PLATFORM_WINDOWS) {
-            m_window.webViewEnvironment.m_userDataFolder
-                = glow::filesystem::known_folder(FOLDERID_LocalAppData, { "template-clap-plugin" });
+            // m_window.webViewEnvironment.m_userDataFolder
+            //     = glow::filesystem::known_folder(FOLDERID_LocalAppData, { "template-clap-plugin"
+            //     });
         }
 
         return true;
@@ -91,7 +92,7 @@ template <typename T, typename U> struct Helper : public U {
         if (PLATFORM_WINDOWS) {
             // glow::window::set_position(m_window.m_hwnd.get(), 0, 0, width, height);
 
-            return gui::setSize(width, height;)
+            return gui::setSize(width, height);
         }
 
         return true;
@@ -114,7 +115,7 @@ template <typename T, typename U> struct Helper : public U {
             // glow::window::set_style(m_window.m_hwnd.get(), WS_POPUP);
             // glow::window::set_parent(m_window.m_hwnd.get(), (::HWND)window->win32);
 
-            return gui::setParent(const clap_window* window);
+            return gui::setParent(window);
         }
 
         return false;
@@ -183,6 +184,6 @@ template <typename T, typename U> struct Helper : public U {
     }
 
     std::unordered_map<clap_id, double*> m_params;
-    hand::Window m_window;
+    // hand::Window m_window;
 };
 } // namespace hand
