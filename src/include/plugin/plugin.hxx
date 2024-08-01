@@ -4,8 +4,11 @@
 #include <clap/helpers/plugin.hxx>
 
 #include <cstring>
-#include <functional>
 #include <unordered_map>
+
+#include "descriptor.hxx"
+#include "event.hxx"
+#include "factory.hxx"
 
 #if PLATFORM_WINDOWS
 #include "win32.hxx"
@@ -24,40 +27,6 @@ using IgnoreMin = clap::helpers::Plugin<clap::helpers::MisbehaviourHandler::Igno
                                         clap::helpers::CheckingLevel::Minimal>;
 using IgnoreNone = clap::helpers::Plugin<clap::helpers::MisbehaviourHandler::Ignore,
                                          clap::helpers::CheckingLevel::None>;
-
-extern const clap_plugin_descriptor clap_descriptor;
-extern const clap_plugin_factory clap_factory;
-
-namespace factory {
-    auto get_plugin_count(const clap_plugin_factory* factory) -> uint32_t;
-    auto get_plugin_descriptor(const clap_plugin_factory* factory,
-                               uint32_t index) -> const clap_plugin_descriptor*;
-    auto create_plugin(const struct clap_plugin_factory* factory,
-                       const clap_host* host,
-                       const char* plugin_id) -> const clap_plugin*;
-} // namespace factory
-
-namespace entry {
-    auto init(const char* plugin_path) -> bool;
-    auto deinit(void) -> void;
-    auto get_factory(const char* factory_id) -> const void*;
-} // namespace entry
-
-namespace event {
-    auto run_loop(const clap_process* process,
-                  std::function<void(const clap_event_header* event)> eventHandler)
-        -> clap_process_status;
-} // namespace event
-
-auto create(const clap_host* host) -> const clap_plugin*;
-
-template <typename T>
-std::function<const clap_plugin*(const clap_host*)> make {
-    [](const clap_host* host) -> const clap_plugin* {
-    auto plugin = new T(host);
-    return plugin->clapPlugin();
-}
-};
 
 template <typename T, typename U> struct Helper : public U {
     Helper(const clap_host* host)

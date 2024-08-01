@@ -15,7 +15,9 @@ add_library(
 target_sources(
     Hand
     PUBLIC "src/entry.cxx"
-    PRIVATE "src/plugin.cxx"
+    PRIVATE "src/descriptor.cxx"
+            "src/factory.cxx"
+            "src/event.cxx"
             "src/win32.cxx"
     PUBLIC FILE_SET
            HEADERS
