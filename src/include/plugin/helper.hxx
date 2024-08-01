@@ -16,7 +16,6 @@ using IgnoreMin = clap::helpers::Plugin<clap::helpers::MisbehaviourHandler::Igno
                                         clap::helpers::CheckingLevel::Minimal>;
 using IgnoreNone = clap::helpers::Plugin<clap::helpers::MisbehaviourHandler::Ignore,
                                          clap::helpers::CheckingLevel::None>;
-using Parameters = std::unordered_map<clap_id, double*>;
 
 template <typename T, typename U> struct Helper : public U {
     Helper(const clap_plugin_descriptor* descriptor, const clap_host* host)
@@ -164,7 +163,7 @@ template <typename T, typename U> struct Helper : public U {
         return true;
     }
 
-    plugin::Parameters m_params;
+    std::unordered_map<clap_id, double*> m_params;
     plugin::Window m_window;
 };
 } // namespace plugin
