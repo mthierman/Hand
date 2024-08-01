@@ -1,7 +1,7 @@
 #pragma once
 
-namespace plugin {
+namespace hand {
 namespace gui {
     auto create() -> bool;
 }
-} // namespace plugin
+} // namespace hand

@@ -2,11 +2,11 @@
 
 #include <hand/plugin.hxx>
 
-struct ExamplePlugin final : public plugin::Helper<ExamplePlugin, plugin::IgnoreNone> {
+struct ExamplePlugin final : public hand::Helper<ExamplePlugin, hand::IgnoreNone> {
     explicit ExamplePlugin(const clap_host* host)
-        : plugin::Helper<ExamplePlugin, plugin::IgnoreNone>(host) { }
+        : hand::Helper<ExamplePlugin, hand::IgnoreNone>(host) { }
 };
 
 namespace {
-auto examplePlugin { plugin::make<ExamplePlugin>() };
+auto examplePlugin { hand::make<ExamplePlugin>() };
 }

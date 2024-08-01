@@ -1,6 +1,6 @@
 #include <hand/win32.hxx>
 
-namespace plugin {
+namespace hand {
 Window::Window() {
     message(WM_CREATE, [this](glow::messages::wm_create /* message */) {
         glow::window::set_position(m_hwnd.get(), 0, 0, 640, 480);
@@ -38,4 +38,4 @@ auto Window::createWebView() -> void {
         webView.put_bounds(m_hwnd.get());
     });
 }
-} // namespace plugin
+} // namespace hand

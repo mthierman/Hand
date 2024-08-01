@@ -5,13 +5,13 @@
 #include <glow/webview.hxx>
 #include <glow/window.hxx>
 
-namespace plugin {
+namespace hand {
 struct Window final : glow::window::Window {
     Window();
 
     auto createWebView() -> void;
-    
+
     glow::webview::WebViewEnvironment webViewEnvironment;
     glow::webview::WebView webView;
 };
-} // namespace plugin
+} // namespace hand

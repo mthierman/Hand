@@ -2,7 +2,7 @@
 
 #include <cassert>
 
-namespace plugin {
+namespace hand {
 namespace event {
     auto run_loop(const clap_process* process,
                   std::function<void(const clap_event_header* event)> eventHandler)
@@ -37,4 +37,4 @@ namespace event {
         return CLAP_PROCESS_SLEEP;
     }
 } // namespace event
-} // namespace plugin
+} // namespace hand

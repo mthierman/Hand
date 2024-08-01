@@ -1,13 +1,13 @@
 #include <hand/descriptor.hxx>
 #include <hand/factory.hxx>
 
-namespace plugin {
+namespace hand {
 namespace factory {
     auto get_plugin_count(const clap_plugin_factory* /* factory */) -> uint32_t { return 1; }
 
     auto get_plugin_descriptor(const clap_plugin_factory* /* factory */,
                                uint32_t /* index */) -> const clap_plugin_descriptor* {
-        return &plugin::clap_descriptor;
+        return &hand::clap_descriptor;
     }
 
     auto create_plugin(const struct clap_plugin_factory* factory,
@@ -17,8 +17,8 @@ namespace factory {
     }
 } // namespace factory
 
-const clap_plugin_factory clap_factory { .get_plugin_count { plugin::factory::get_plugin_count },
+const clap_plugin_factory clap_factory { .get_plugin_count { hand::factory::get_plugin_count },
                                          .get_plugin_descriptor {
-                                             plugin::factory::get_plugin_descriptor },
-                                         .create_plugin { plugin::factory::create_plugin } };
-} // namespace plugin
+                                             hand::factory::get_plugin_descriptor },
+                                         .create_plugin { hand::factory::create_plugin } };
+} // namespace hand

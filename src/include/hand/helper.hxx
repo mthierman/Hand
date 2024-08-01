@@ -12,7 +12,7 @@
 
 #include "gui.hxx"
 
-namespace plugin {
+namespace hand {
 using TerminateMax = clap::helpers::Plugin<clap::helpers::MisbehaviourHandler::Terminate,
                                            clap::helpers::CheckingLevel::Maximal>;
 using TerminateMin = clap::helpers::Plugin<clap::helpers::MisbehaviourHandler::Terminate,
@@ -25,9 +25,9 @@ using IgnoreMin = clap::helpers::Plugin<clap::helpers::MisbehaviourHandler::Igno
                                         clap::helpers::CheckingLevel::Minimal>;
 using IgnoreNone = clap::helpers::Plugin<clap::helpers::MisbehaviourHandler::Ignore,
                                          clap::helpers::CheckingLevel::None>;
-} // namespace plugin
+} // namespace hand
 
-namespace plugin {
+namespace hand {
 template <typename T, typename U> struct Helper : public U {
     Helper(const clap_host* host)
         : U(&clap_descriptor, host) { }
@@ -179,6 +179,6 @@ template <typename T, typename U> struct Helper : public U {
     }
 
     std::unordered_map<clap_id, double*> m_params;
-    plugin::Window m_window;
+    hand::Window m_window;
 };
-} // namespace plugin
+} // namespace hand

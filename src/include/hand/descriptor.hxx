@@ -2,6 +2,6 @@
 
 #include <clap/plugin.h>
 
-namespace plugin {
+namespace hand {
 extern const clap_plugin_descriptor clap_descriptor;
-} // namespace plugin
+} // namespace hand

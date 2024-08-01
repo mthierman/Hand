@@ -4,7 +4,7 @@
 
 #include <functional>
 
-namespace plugin {
+namespace hand {
 namespace factory {
     auto get_plugin_count(const clap_plugin_factory* factory) -> uint32_t;
     auto get_plugin_descriptor(const clap_plugin_factory* factory,
@@ -29,4 +29,4 @@ template <typename T> auto make() -> bool {
 
     return true;
 };
-} // namespace plugin
+} // namespace hand

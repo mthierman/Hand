@@ -1,7 +1,7 @@
 #include "hand/gui.hxx"
 
-namespace plugin {
+namespace hand {
 namespace gui {
     auto create() -> bool { return true; }
 } // namespace gui
-} // namespace plugin
+} // namespace hand

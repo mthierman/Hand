@@ -1,7 +1,7 @@
 #include <hand/descriptor.hxx>
 #include <hand/features.hxx>
 
-namespace plugin {
+namespace hand {
 const clap_plugin_descriptor clap_descriptor { .clap_version { CLAP_VERSION },
                                                .id { PLUGIN_ID },
                                                .name { PLUGIN_NAME },
@@ -12,4 +12,4 @@ const clap_plugin_descriptor clap_descriptor { .clap_version { CLAP_VERSION },
                                                .version { PLUGIN_VERSION },
                                                .description { PLUGIN_DESCRIPTION },
                                                .features { plugin::features.data() } };
-} // namespace plugin
+} // namespace hand
