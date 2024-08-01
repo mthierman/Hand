@@ -10,6 +10,8 @@
 #include "win32.hxx"
 #endif
 
+#include "gui.hxx"
+
 namespace plugin {
 using TerminateMax = clap::helpers::Plugin<clap::helpers::MisbehaviourHandler::Terminate,
                                            clap::helpers::CheckingLevel::Maximal>;
