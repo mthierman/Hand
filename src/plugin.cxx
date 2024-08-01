@@ -37,6 +37,17 @@ namespace event {
 } // namespace event
 } // namespace plugin
 
+clap_plugin_descriptor descriptor { .clap_version { CLAP_VERSION },
+                                    .id { PLUGIN_ID },
+                                    .name { PLUGIN_NAME },
+                                    .vendor { PLUGIN_VENDOR },
+                                    .url { PLUGIN_URL },
+                                    .manual_url { PLUGIN_MANUAL_URL },
+                                    .support_url { PLUGIN_SUPPORT_URL },
+                                    .version { PLUGIN_VERSION },
+                                    .description { PLUGIN_DESCRIPTION },
+                                    .features { plugin::features.data() } };
+
 namespace plugin::factory {
 auto get_plugin_count(const clap_plugin_factory* /* factory */) -> uint32_t { return 1; }
 
@@ -50,11 +61,12 @@ auto create_plugin(const struct clap_plugin_factory* /* factory */,
                    const char* /* plugin_id */) -> const clap_plugin* {
     return plugin::create(host);
 }
-
-clap_plugin_factory clap_factory { .get_plugin_count { get_plugin_count },
-                                   .get_plugin_descriptor { get_plugin_descriptor },
-                                   .create_plugin { create_plugin } };
 } // namespace plugin::factory
+
+clap_plugin_factory clap_factory { .get_plugin_count { plugin::factory::get_plugin_count },
+                                   .get_plugin_descriptor {
+                                       plugin::factory::get_plugin_descriptor },
+                                   .create_plugin { plugin::factory::create_plugin } };
 
 namespace plugin::entry {
 auto init(const char* /* plugin_path */) -> bool { return true; }
@@ -62,7 +74,7 @@ auto init(const char* /* plugin_path */) -> bool { return true; }
 auto deinit(void) -> void { }
 
 auto get_factory(const char* factory_id) -> const void* {
-    return (factory_id != CLAP_PLUGIN_FACTORY_ID) ? &plugin::factory::clap_factory : nullptr;
+    return (factory_id != CLAP_PLUGIN_FACTORY_ID) ? &clap_factory : nullptr;
 }
 } // namespace plugin::entry
 
