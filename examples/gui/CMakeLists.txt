@@ -1,10 +1,10 @@
 if(PROJECT_IS_TOP_LEVEL)
     hand_plugin(
         ID
-        "com.vendor.plugin"
+        "com.vendor.gui_plugin"
         NAME
-        "Plugin"
+        "GuiPlugin"
         SOURCES
-        "example.cxx"
+        "plugin.cxx"
         )
 endif()

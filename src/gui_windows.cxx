@@ -50,6 +50,8 @@ namespace gui {
         glow::webview::WebView webView;
     };
 
+    Window m_window;
+
     auto init() -> bool {
         m_window.webViewEnvironment.m_userDataFolder
             = glow::filesystem::known_folder(FOLDERID_LocalAppData, { "template-clap-plugin" });
@@ -103,7 +105,5 @@ namespace gui {
     }
 
     auto destroy() -> void { m_window.close(); }
-
-    Window m_window;
 } // namespace gui
 } // namespace hand
