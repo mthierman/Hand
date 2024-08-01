@@ -13,8 +13,13 @@ namespace factory {
     auto create_plugin(const struct clap_plugin_factory* /* factory */,
                        const clap_host_t* host,
                        const char* /* plugin_id */) -> const clap_plugin* {
-        return plugin::create(host);
+        return create_plugin_callback(host);
     }
+
+    auto create_plugin_callback(const clap_host* host) -> const clap_plugin* {
+        return create_plugin_lambda(host);
+    }
+
 } // namespace factory
 
 const clap_plugin_factory clap_factory { .get_plugin_count { plugin::factory::get_plugin_count },
