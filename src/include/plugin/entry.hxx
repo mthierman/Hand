@@ -1,6 +1,6 @@
 #pragma once
 
-#include <clap/all.h>
+#include <clap/entry.h>
 
 namespace plugin {
 namespace entry {

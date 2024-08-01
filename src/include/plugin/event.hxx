@@ -1,6 +1,7 @@
 #pragma once
 
-#include <clap/all.h>
+#include <clap/events.h>
+#include <clap/process.h>
 
 #include <functional>
 

@@ -1,6 +1,6 @@
 #pragma once
 
-#include <clap/all.h>
+#include <clap/plugin.h>
 
 namespace plugin {
 extern const clap_plugin_descriptor clap_descriptor;

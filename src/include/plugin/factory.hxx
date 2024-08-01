@@ -1,6 +1,6 @@
 #pragma once
 
-#include <clap/all.h>
+#include <clap/factory/plugin-factory.h>
 
 #include <functional>
 
