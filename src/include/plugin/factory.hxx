@@ -13,15 +13,17 @@ namespace factory {
                        const clap_host* host,
                        const char* plugin_id) -> const clap_plugin*;
 
-    auto create_plugin_callback(const clap_host* host) -> const clap_plugin*;
-
-    inline std::function<const clap_plugin*(const clap_host* host)> create_plugin_lambda;
+    inline std::function<const clap_plugin*(
+        const clap_plugin_factory*, const clap_host*, const char*)>
+        create_clap_plugin;
 } // namespace factory
 
 extern const clap_plugin_factory clap_factory;
 
 template <typename T> auto make() -> bool {
-    factory::create_plugin_lambda = [](const clap_host* host) -> const clap_plugin* {
+    factory::create_clap_plugin = [](const struct clap_plugin_factory* /* factory */,
+                                     const clap_host* host,
+                                     const char* /* plugin_id */) -> const clap_plugin* {
         auto plugin = new T(host);
         return plugin->clapPlugin();
     };
