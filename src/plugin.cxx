@@ -53,7 +53,7 @@ auto get_plugin_count(const clap_plugin_factory* /* factory */) -> uint32_t { re
 
 auto get_plugin_descriptor(const clap_plugin_factory* /* factory */,
                            uint32_t /* index */) -> const clap_plugin_descriptor* {
-    return &descriptor;
+    return &plugin::descriptor;
 }
 
 auto create_plugin(const struct clap_plugin_factory* /* factory */,
