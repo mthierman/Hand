@@ -14,7 +14,6 @@
 #include <config/config.hxx>
 
 namespace plugin {
-
 using TerminateMax = clap::helpers::Plugin<clap::helpers::MisbehaviourHandler::Terminate,
                                            clap::helpers::CheckingLevel::Maximal>;
 using TerminateMin = clap::helpers::Plugin<clap::helpers::MisbehaviourHandler::Terminate,

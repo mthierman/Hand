@@ -14,8 +14,9 @@ add_library(
 
 target_sources(
     Hand
-    PUBLIC "src/plugin.cxx"
-           "src/win32.cxx"
+    PUBLIC "src/entry.cxx"
+    PRIVATE "src/plugin.cxx"
+            "src/win32.cxx"
     PUBLIC FILE_SET
            HEADERS
            BASE_DIRS
