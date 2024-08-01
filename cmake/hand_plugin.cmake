@@ -54,8 +54,8 @@ function(hand_plugin)
         )
 
     configure_file(
-        ${CMAKE_CURRENT_FUNCTION_LIST_DIR}/config/config.hxx
-        ${CMAKE_CURRENT_BINARY_DIR}/include/config/config.hxx
+        ${CMAKE_CURRENT_FUNCTION_LIST_DIR}/include/plugin/config.hxx
+        ${CMAKE_CURRENT_BINARY_DIR}/include/plugin/config.hxx
         )
 
     target_include_directories(Hand PUBLIC ${CMAKE_CURRENT_BINARY_DIR}/include)

@@ -1,3 +1,4 @@
+#include <plugin/config.hxx>
 #include <plugin/plugin.hxx>
 
 namespace plugin {

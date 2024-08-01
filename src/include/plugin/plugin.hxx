@@ -3,8 +3,6 @@
 #include <clap/helpers/plugin.hh>
 #include <clap/helpers/plugin.hxx>
 
-#include <config/config.hxx>
-
 #include <cstring>
 #include <functional>
 #include <unordered_map>
