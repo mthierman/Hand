@@ -51,19 +51,59 @@ namespace gui {
     };
 
     auto init() -> bool {
-        // m_window.webViewEnvironment.m_userDataFolder
-        //     = glow::filesystem::known_folder(FOLDERID_LocalAppData, { "template-clap-plugin"
-        //     });
+        m_window.webViewEnvironment.m_userDataFolder
+            = glow::filesystem::known_folder(FOLDERID_LocalAppData, { "template-clap-plugin" });
 
         return true;
     }
-    auto create() -> bool { return true; }
-    auto setScale(double scale) -> bool { return true; }
-    auto setSize(uint32_t width, uint32_t height) -> bool { return true; }
-    auto getSize(uint32_t* width, uint32_t* height) -> bool { return true; }
-    auto setParent(const clap_window* window) -> bool { return true; }
-    auto show() -> bool { return true; }
-    auto hide() -> bool { return true; }
-    auto destroy() -> void { }
+
+    auto create() -> bool {
+        m_window.create();
+
+        return true;
+    }
+
+    auto setScale(double scale) -> bool {
+        m_window.m_scale = scale;
+
+        return true;
+    }
+
+    auto setSize(uint32_t width, uint32_t height) -> bool {
+        glow::window::set_position(m_window.m_hwnd.get(), 0, 0, width, height);
+
+        return true;
+    }
+
+    auto getSize(uint32_t* width, uint32_t* height) -> bool {
+        auto rect { glow::window::get_client_rect(m_window.m_hwnd.get()) };
+        *width = rect.right - rect.left;
+        *height = rect.bottom - rect.top;
+
+        return true;
+    }
+
+    auto setParent(const clap_window* window) -> bool {
+        glow::window::set_style(m_window.m_hwnd.get(), WS_POPUP);
+        glow::window::set_parent(m_window.m_hwnd.get(), (::HWND)window->win32);
+
+        return true;
+    }
+
+    auto show() -> bool {
+        glow::window::show(m_window.m_hwnd.get());
+
+        return true;
+    }
+
+    auto hide() -> bool {
+        glow::window::hide(m_window.m_hwnd.get());
+
+        return true;
+    }
+
+    auto destroy() -> void { m_window.close(); }
+
+    Window m_window;
 } // namespace gui
 } // namespace hand

@@ -59,24 +59,10 @@ template <typename T, typename U> struct Helper : public U {
     }
 
     auto guiCreate(const char* /* api */, bool /* isFloating */) noexcept -> bool override {
-        if (PLATFORM_WINDOWS) {
-            // m_window.create();
-
-            return gui::create();
-        }
-
-        return false;
+        return gui::create();
     }
 
-    auto guiSetScale(double scale) noexcept -> bool override {
-        if (PLATFORM_WINDOWS) {
-            // m_window.m_scale = scale;
-
-            return gui::setScale(scale);
-        }
-
-        return false;
-    }
+    auto guiSetScale(double scale) noexcept -> bool override { return gui::setScale(scale); }
 
     auto guiCanResize() const noexcept -> bool override { return true; }
 
@@ -85,63 +71,22 @@ template <typename T, typename U> struct Helper : public U {
     }
 
     auto guiSetSize(uint32_t width, uint32_t height) noexcept -> bool override {
-        if (PLATFORM_WINDOWS) {
-            // glow::window::set_position(m_window.m_hwnd.get(), 0, 0, width, height);
-
-            return gui::setSize(width, height);
-        }
-
-        return true;
+        return gui::setSize(width, height);
     }
 
     auto guiGetSize(uint32_t* width, uint32_t* height) noexcept -> bool override {
-        if (PLATFORM_WINDOWS) {
-            // auto rect { glow::window::get_client_rect(m_window.m_hwnd.get()) };
-            // *width = rect.right - rect.left;
-            // *height = rect.bottom - rect.top;
-
-            return gui::getSize(width, height);
-        }
-
-        return false;
+        return gui::getSize(width, height);
     }
 
     auto guiSetParent(const clap_window* window) noexcept -> bool override {
-        if (PLATFORM_WINDOWS) {
-            // glow::window::set_style(m_window.m_hwnd.get(), WS_POPUP);
-            // glow::window::set_parent(m_window.m_hwnd.get(), (::HWND)window->win32);
-
-            return gui::setParent(window);
-        }
-
-        return false;
+        return gui::setParent(window);
     }
 
-    auto guiShow() noexcept -> bool override {
-        if (PLATFORM_WINDOWS) {
-            // glow::window::show(m_window.m_hwnd.get());
+    auto guiShow() noexcept -> bool override { return gui::show(); }
 
-            return gui::show();
-        }
+    auto guiHide() noexcept -> bool override { return gui::hide(); }
 
-        return false;
-    }
-
-    auto guiHide() noexcept -> bool override {
-        if (PLATFORM_WINDOWS) {
-            // glow::window::hide(m_window.m_hwnd.get());
-
-            return gui::hide();
-        }
-
-        return false;
-    }
-
-    auto guiDestroy() noexcept -> void override {
-        //  m_window.close();
-
-        gui::destroy();
-    }
+    auto guiDestroy() noexcept -> void override { gui::destroy(); }
 
     auto guiGetPreferredApi(const char** /* api */,
                             bool* /* is_floating */) noexcept -> bool override {
@@ -180,6 +125,5 @@ template <typename T, typename U> struct Helper : public U {
     }
 
     std::unordered_map<clap_id, double*> m_params;
-    // hand::Window m_window;
 };
 } // namespace hand
