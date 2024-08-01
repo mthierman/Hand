@@ -4,6 +4,7 @@
 
 namespace hand {
 namespace gui {
+    auto init() -> bool;
     auto create() -> bool;
     auto setScale(double scale) -> bool;
     auto setSize(uint32_t width, uint32_t height) -> bool;
