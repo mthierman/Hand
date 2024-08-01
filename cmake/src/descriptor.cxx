@@ -1,3 +1,4 @@
+// clang-format off
 #include <hand/descriptor.hxx>
 
 namespace hand {
@@ -12,3 +13,4 @@ const clap_plugin_descriptor clap_descriptor { .clap_version { CLAP_VERSION },
                                                .description { descriptor::description },
                                                .features { descriptor::features.data() } };
 } // namespace hand
+// clang-format on

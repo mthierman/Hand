@@ -15,8 +15,7 @@ add_library(
 target_sources(
     Hand
     PUBLIC "src/entry.cxx"
-    PRIVATE "src/descriptor.cxx"
-            "src/factory.cxx"
+    PRIVATE "src/factory.cxx"
             "src/event.cxx"
     PUBLIC FILE_SET
            HEADERS

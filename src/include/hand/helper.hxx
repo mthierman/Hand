@@ -6,11 +6,8 @@
 #include <cstring>
 #include <unordered_map>
 
-#if PLATFORM_WINDOWS
-#include "win32.hxx"
-#endif
-
 #include "gui.hxx"
+#include <plugin/descriptor.hxx>
 
 namespace hand {
 using TerminateMax = clap::helpers::Plugin<clap::helpers::MisbehaviourHandler::Terminate,

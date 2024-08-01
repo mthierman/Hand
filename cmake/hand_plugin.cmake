@@ -53,38 +53,28 @@ function(hand_plugin)
         PLUGIN_FEATURES
         )
 
-    configure_file(
-        ${CMAKE_CURRENT_FUNCTION_LIST_DIR}/include/hand/descriptor.hxx
-        ${CMAKE_CURRENT_BINARY_DIR}/include/hand/descriptor.hxx
-        )
-
-    target_include_directories(Hand PUBLIC ${CMAKE_CURRENT_BINARY_DIR}/include)
-
-    target_compile_definitions(
-        Hand
-        PUBLIC PLUGIN_ID="${PLUGIN_ID}"
-               PLUGIN_NAME="${PLUGIN_NAME}"
-               PLUGIN_VENDOR="${PLUGIN_VENDOR}"
-               PLUGIN_URL="${PLUGIN_URL}"
-               PLUGIN_MANUAL_URL="${PLUGIN_MANUAL_URL}"
-               PLUGIN_SUPPORT_URL="${PLUGIN_SUPPORT_URL}"
-               PLUGIN_VERSION="${PLUGIN_VERSION}"
-               PLUGIN_DESCRIPTION="${PLUGIN_DESCRIPTION}"
-        )
-
     add_library(
         ${PLUGIN_NAME}
         MODULE
         )
 
-    list(
-        JOIN
-        PLUGIN_FEATURES
-        ","
-        PLUGIN_FEATURE_LIST
+    configure_file(
+        "${CMAKE_CURRENT_FUNCTION_LIST_DIR}/src/include/hand/descriptor.hxx"
+        "${CMAKE_CURRENT_BINARY_DIR}/src/include/hand/descriptor.hxx"
         )
 
-    target_sources(${PLUGIN_NAME} PRIVATE ${PLUGIN_SOURCES})
+    configure_file(
+        "${CMAKE_CURRENT_FUNCTION_LIST_DIR}/src/descriptor.cxx"
+        "${CMAKE_CURRENT_BINARY_DIR}/src/descriptor.cxx"
+        )
+
+    target_sources(
+        ${PLUGIN_NAME}
+        PRIVATE ${PLUGIN_SOURCES}
+                "${CMAKE_CURRENT_BINARY_DIR}/src/descriptor.cxx"
+        )
+
+    target_include_directories(Hand PUBLIC "${CMAKE_CURRENT_BINARY_DIR}/src/include")
 
     target_link_libraries(${PLUGIN_NAME} PRIVATE hand::hand)
 
