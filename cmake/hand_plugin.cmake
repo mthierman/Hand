@@ -54,8 +54,8 @@ function(hand_plugin)
         )
 
     configure_file(
-        ${CMAKE_CURRENT_FUNCTION_LIST_DIR}/include/hand/features.hxx
-        ${CMAKE_CURRENT_BINARY_DIR}/include/hand/features.hxx
+        ${CMAKE_CURRENT_FUNCTION_LIST_DIR}/include/hand/descriptor.hxx
+        ${CMAKE_CURRENT_BINARY_DIR}/include/hand/descriptor.hxx
         )
 
     target_include_directories(Hand PUBLIC ${CMAKE_CURRENT_BINARY_DIR}/include)
