@@ -13,17 +13,16 @@
 #include <config/config.hxx>
 
 namespace plugin {
-using Descriptor = const clap_plugin_descriptor*;
-using Host = const clap_host*;
-using Plugin = const clap_plugin*;
 
 template <typename T>
-std::function<Plugin(Descriptor, Host)> make { [](Descriptor descriptor, Host host) -> Plugin {
+std::function<const clap_plugin*(const clap_plugin_descriptor*, const clap_host*)> make {
+    [](const clap_plugin_descriptor* descriptor, const clap_host* host) -> const clap_plugin* {
     auto plugin = new T(descriptor, host);
     return plugin->clapPlugin();
-} };
+}
+};
 
-auto create(Descriptor descriptor, Host host) -> Plugin;
+auto create(const clap_plugin_descriptor* descriptor, const clap_host* host) -> const clap_plugin*;
 
 namespace event {
     auto run_loop(const clap_process* process,
