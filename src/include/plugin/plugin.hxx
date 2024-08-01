@@ -12,13 +12,20 @@
 #endif
 
 namespace plugin {
-extern const clap_plugin_descriptor descriptor;
+using TerminateMax = clap::helpers::Plugin<clap::helpers::MisbehaviourHandler::Terminate,
+                                           clap::helpers::CheckingLevel::Maximal>;
+using TerminateMin = clap::helpers::Plugin<clap::helpers::MisbehaviourHandler::Terminate,
+                                           clap::helpers::CheckingLevel::Minimal>;
+using TerminateNone = clap::helpers::Plugin<clap::helpers::MisbehaviourHandler::Terminate,
+                                            clap::helpers::CheckingLevel::None>;
+using IgnoreMax = clap::helpers::Plugin<clap::helpers::MisbehaviourHandler::Ignore,
+                                        clap::helpers::CheckingLevel::Maximal>;
+using IgnoreMin = clap::helpers::Plugin<clap::helpers::MisbehaviourHandler::Ignore,
+                                        clap::helpers::CheckingLevel::Minimal>;
+using IgnoreNone = clap::helpers::Plugin<clap::helpers::MisbehaviourHandler::Ignore,
+                                         clap::helpers::CheckingLevel::None>;
 
-namespace event {
-    auto run_loop(const clap_process* process,
-                  std::function<void(const clap_event_header* event)> eventHandler)
-        -> clap_process_status;
-} // namespace event
+extern const clap_plugin_descriptor clap_descriptor;
 
 namespace factory {
     auto get_plugin_count(const clap_plugin_factory* factory) -> uint32_t;
@@ -35,22 +42,17 @@ namespace entry {
     auto get_factory(const char* factory_id) -> const void*;
 } // namespace entry
 
-using TerminateMax = clap::helpers::Plugin<clap::helpers::MisbehaviourHandler::Terminate,
-                                           clap::helpers::CheckingLevel::Maximal>;
-using TerminateMin = clap::helpers::Plugin<clap::helpers::MisbehaviourHandler::Terminate,
-                                           clap::helpers::CheckingLevel::Minimal>;
-using TerminateNone = clap::helpers::Plugin<clap::helpers::MisbehaviourHandler::Terminate,
-                                            clap::helpers::CheckingLevel::None>;
-using IgnoreMax = clap::helpers::Plugin<clap::helpers::MisbehaviourHandler::Ignore,
-                                        clap::helpers::CheckingLevel::Maximal>;
-using IgnoreMin = clap::helpers::Plugin<clap::helpers::MisbehaviourHandler::Ignore,
-                                        clap::helpers::CheckingLevel::Minimal>;
-using IgnoreNone = clap::helpers::Plugin<clap::helpers::MisbehaviourHandler::Ignore,
-                                         clap::helpers::CheckingLevel::None>;
+namespace event {
+    auto run_loop(const clap_process* process,
+                  std::function<void(const clap_event_header* event)> eventHandler)
+        -> clap_process_status;
+} // namespace event
+
+auto create(const clap_host* host) -> const clap_plugin*;
 
 template <typename T, typename U> struct Helper : public U {
     Helper(const clap_host* host)
-        : U(&descriptor, host) {
+        : U(&clap_descriptor, host) {
         if (PLATFORM_WINDOWS) {
             m_window.webViewEnvironment.m_userDataFolder
                 = glow::filesystem::known_folder(FOLDERID_LocalAppData, { "template-clap-plugin" });
@@ -205,6 +207,4 @@ std::function<const clap_plugin*(const clap_host*)> make {
     return plugin->clapPlugin();
 }
 };
-
-auto create(const clap_host* host) -> const clap_plugin*;
 } // namespace plugin
