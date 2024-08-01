@@ -1,5 +1,5 @@
-#include <plugin/entry.hxx>
-#include <plugin/factory.hxx>
+#include <hand/entry.hxx>
+#include <hand/factory.hxx>
 
 namespace plugin {
 namespace entry {

@@ -1,4 +1,4 @@
-#include <plugin/win32.hxx>
+#include <hand/win32.hxx>
 
 namespace plugin {
 Window::Window() {

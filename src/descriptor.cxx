@@ -1,5 +1,5 @@
-#include <plugin/features.hxx>
-#include <plugin/descriptor.hxx>
+#include <hand/descriptor.hxx>
+#include <hand/features.hxx>
 
 namespace plugin {
 const clap_plugin_descriptor clap_descriptor { .clap_version { CLAP_VERSION },

@@ -1,5 +1,5 @@
-#include <plugin/descriptor.hxx>
-#include <plugin/factory.hxx>
+#include <hand/descriptor.hxx>
+#include <hand/factory.hxx>
 
 namespace plugin {
 namespace factory {
