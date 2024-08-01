@@ -1,4 +1,6 @@
 // clang-format off
+#pragma once
+
 #include <array>
 
 namespace plugin {
