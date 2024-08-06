@@ -7,15 +7,15 @@
 
 namespace hand {
 namespace descriptor {
-    constexpr const char* id { "@PLUGIN_ID@" };
-    constexpr const char* name { "@PLUGIN_NAME@" };
-    constexpr const char* vendor { "@PLUGIN_VENDOR@" };
-    constexpr const char* url { "@PLUGIN_URL@" };
-    constexpr const char* manual_url { "@PLUGIN_MANUAL_URL@" };
-    constexpr const char* support_url { "@PLUGIN_SUPPORT_URL@" };
-    constexpr const char* version { "@PLUGIN_VERSION@" };
-    constexpr const char* description { "@PLUGIN_DESCRIPTION@" };
-    constexpr std::array features { @PLUGIN_FEATURES@ };
+    const char* id ;
+    const char* name ;
+    const char* vendor ;
+    const char* url ;
+    const char* manual_url ;
+    const char* support_url ;
+    const char* version ;
+    const char* description ;
+    const std::array features;
 } // namespace descriptor
 
 extern const clap_plugin_descriptor clap_descriptor;

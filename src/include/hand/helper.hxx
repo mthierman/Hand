@@ -7,7 +7,7 @@
 #include <unordered_map>
 
 #include "gui.hxx"
-#include <plugin/descriptor.hxx>
+#include <hand/descriptor.hxx>
 
 namespace hand {
 using TerminateMax = clap::helpers::Plugin<clap::helpers::MisbehaviourHandler::Terminate,
