@@ -59,11 +59,6 @@ function(hand_plugin)
         )
 
     configure_file(
-        "${CMAKE_CURRENT_FUNCTION_LIST_DIR}/src/include/hand/descriptor.hxx"
-        "${CMAKE_CURRENT_BINARY_DIR}/src/include/hand/descriptor.hxx"
-        )
-
-    configure_file(
         "${CMAKE_CURRENT_FUNCTION_LIST_DIR}/src/descriptor.cxx"
         "${CMAKE_CURRENT_BINARY_DIR}/src/descriptor.cxx"
         )
@@ -73,8 +68,6 @@ function(hand_plugin)
         PRIVATE ${PLUGIN_SOURCES}
                 "${CMAKE_CURRENT_BINARY_DIR}/src/descriptor.cxx"
         )
-
-    target_include_directories(Hand PUBLIC "${CMAKE_CURRENT_BINARY_DIR}/src/include")
 
     target_link_libraries(${PLUGIN_NAME} PRIVATE hand::hand)
 
