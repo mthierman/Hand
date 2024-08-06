@@ -1,4 +1,4 @@
-#include "hand/gui.hxx"
+#include <hand/gui.hxx>
 
 namespace hand {
 namespace gui {
