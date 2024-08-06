@@ -11,7 +11,7 @@ namespace descriptor {
     const char* support_url { "@PLUGIN_SUPPORT_URL@" };
     const char* version { "@PLUGIN_VERSION@" };
     const char* description { "@PLUGIN_DESCRIPTION@" };
-    const std::array features { @PLUGIN_FEATURES@ };
+    const std::vector<const char*> features { @PLUGIN_FEATURES@ };
 } // namespace descriptor
 
 const clap_plugin_descriptor clap_descriptor { .clap_version { CLAP_VERSION },

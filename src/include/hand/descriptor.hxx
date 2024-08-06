@@ -2,19 +2,19 @@
 
 #include <clap/plugin.h>
 
-#include <array>
+#include <vector>
 
 namespace hand {
 namespace descriptor {
-    const char* id;
-    const char* name;
-    const char* vendor;
-    const char* url;
-    const char* manual_url;
-    const char* support_url;
-    const char* version;
-    const char* description;
-    const std::array features;
+    extern const char* id;
+    extern const char* name;
+    extern const char* vendor;
+    extern const char* url;
+    extern const char* manual_url;
+    extern const char* support_url;
+    extern const char* version;
+    extern const char* description;
+    extern const std::vector<const char*> features;
 } // namespace descriptor
 
 extern const clap_plugin_descriptor clap_descriptor;
