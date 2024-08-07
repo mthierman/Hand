@@ -7,9 +7,55 @@
 #include <unordered_map>
 
 #include "descriptor.hxx"
-#include "gui.hxx"
+
+#if PLATFORM_WINDOWS
+#include <glow/filesystem.hxx>
+#include <glow/system.hxx>
+#include <glow/webview.hxx>
+#include <glow/window.hxx>
+#endif
 
 namespace hand {
+struct Window final : glow::window::Window {
+    Window() {
+        webViewEnvironment.m_userDataFolder
+            = glow::filesystem::known_folder(FOLDERID_LocalAppData, { "template-clap-plugin" });
+
+        message(WM_CREATE, [this](glow::messages::wm_create /* message */) {
+            glow::window::set_position(m_hwnd.get(), 0, 0, 640, 480);
+
+            webViewEnvironment.create([this]() {
+                webView.create(webViewEnvironment, m_hwnd.get(), [this]() {
+#if HOT_RELOAD
+                    webView.navigate(DEV_URL);
+#else
+                    webView.navigate("https://www.example.com/");
+#endif
+                    webView.put_bounds(m_hwnd.get());
+                });
+            });
+
+            return 0;
+        });
+
+        message(WM_WINDOWPOSCHANGED, [this](glow::messages::wm_windowposchanged /* message */) {
+            webView.put_bounds(m_hwnd.get());
+
+            return 0;
+        });
+
+        message(WM_DESTROY, [this](glow::messages::wm /* message */) {
+            webView.close();
+            webViewEnvironment.close();
+
+            return 0;
+        });
+    }
+
+    glow::webview::WebViewEnvironment webViewEnvironment;
+    glow::webview::WebView webView;
+};
+
 using TerminateMax = clap::helpers::Plugin<clap::helpers::MisbehaviourHandler::Terminate,
                                            clap::helpers::CheckingLevel::Maximal>;
 using TerminateMin = clap::helpers::Plugin<clap::helpers::MisbehaviourHandler::Terminate,
@@ -28,12 +74,6 @@ namespace hand {
 template <typename T, typename U> struct Helper : public U {
     Helper(const clap_host* host)
         : U(&clap_descriptor, host) { }
-
-    auto init() noexcept -> bool override {
-        gui::init();
-
-        return true;
-    }
 
     // params
     auto paramsCount() const noexcept -> uint32_t override {
@@ -56,10 +96,16 @@ template <typename T, typename U> struct Helper : public U {
     }
 
     auto guiCreate(const char* /* api */, bool /* isFloating */) noexcept -> bool override {
-        return gui::create();
+        m_window.create();
+
+        return true;
     }
 
-    auto guiSetScale(double scale) noexcept -> bool override { return gui::setScale(scale); }
+    auto guiSetScale(double scale) noexcept -> bool override {
+        m_window.m_scale = scale;
+
+        return true;
+    }
 
     auto guiCanResize() const noexcept -> bool override { return true; }
 
@@ -68,22 +114,39 @@ template <typename T, typename U> struct Helper : public U {
     }
 
     auto guiSetSize(uint32_t width, uint32_t height) noexcept -> bool override {
-        return gui::setSize(width, height);
+        glow::window::set_position(m_window.m_hwnd.get(), 0, 0, width, height);
+
+        return true;
     }
 
     auto guiGetSize(uint32_t* width, uint32_t* height) noexcept -> bool override {
-        return gui::getSize(width, height);
+        auto rect { glow::window::get_client_rect(m_window.m_hwnd.get()) };
+        *width = rect.right - rect.left;
+        *height = rect.bottom - rect.top;
+
+        return true;
     }
 
     auto guiSetParent(const clap_window* window) noexcept -> bool override {
-        return gui::setParent(window);
+        glow::window::set_style(m_window.m_hwnd.get(), WS_POPUP);
+        glow::window::set_parent(m_window.m_hwnd.get(), (::HWND)window->win32);
+
+        return true;
     }
 
-    auto guiShow() noexcept -> bool override { return gui::show(); }
+    auto guiShow() noexcept -> bool override {
+        glow::window::show(m_window.m_hwnd.get());
 
-    auto guiHide() noexcept -> bool override { return gui::hide(); }
+        return true;
+    }
 
-    auto guiDestroy() noexcept -> void override { gui::destroy(); }
+    auto guiHide() noexcept -> bool override {
+        glow::window::hide(m_window.m_hwnd.get());
+
+        return true;
+    }
+
+    auto guiDestroy() noexcept -> void override { m_window.close(); }
 
     auto guiGetPreferredApi(const char** /* api */,
                             bool* /* is_floating */) noexcept -> bool override {
@@ -122,5 +185,6 @@ template <typename T, typename U> struct Helper : public U {
     }
 
     std::unordered_map<clap_id, double*> m_params;
+    Window m_window;
 };
 } // namespace hand

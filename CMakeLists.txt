@@ -79,8 +79,6 @@ if(CMAKE_SYSTEM_NAME
    STREQUAL
    "Windows"
     )
-    target_sources(Hand PRIVATE "src/gui_windows.cxx")
-
     target_link_libraries(
         Hand
         PUBLIC common::compile_definitions
