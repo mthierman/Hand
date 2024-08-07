@@ -7,9 +7,9 @@
 #ifndef CREATE_PLUGIN
 #define CREATE_PLUGIN(PluginStruct)                                                                \
     namespace hand::factory {                                                                      \
-    auto create_plugin(const struct clap_plugin_factory* factory,                                  \
+    auto create_plugin(const struct clap_plugin_factory* /* factory */,                            \
                        const clap_host* host,                                                      \
-                       const char* plugin_id) -> const clap_plugin* {                              \
+                       const char* /* plugin_id */) -> const clap_plugin* {                        \
         auto plugin { new PluginStruct(host) };                                                    \
         return plugin->clapPlugin();                                                               \
     }                                                                                              \
