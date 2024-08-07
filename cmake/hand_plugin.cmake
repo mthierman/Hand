@@ -66,6 +66,7 @@ function(hand_plugin)
     target_sources(
         ${PLUGIN_NAME}
         PRIVATE ${PLUGIN_SOURCES}
+                "${CMAKE_CURRENT_FUNCTION_LIST_DIR}/src/entry.cxx"
                 "${CMAKE_CURRENT_BINARY_DIR}/src/descriptor.cxx"
         )
 
