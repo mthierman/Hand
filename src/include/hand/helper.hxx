@@ -53,7 +53,8 @@ template <typename T, typename U> struct Helper : public U {
     }
 
     auto guiCreate(const char* /* api */, bool /* isFloating */) noexcept -> bool override {
-        m_window.create();
+        // m_window.create();
+        glow::system::dbg("guiCreate");
 
         return true;
     }
@@ -92,18 +93,27 @@ template <typename T, typename U> struct Helper : public U {
     }
 
     auto guiShow() noexcept -> bool override {
+        glow::system::dbg("guiShow");
         glow::window::show(m_window.m_hwnd.get());
 
         return true;
     }
 
     auto guiHide() noexcept -> bool override {
+        glow::system::dbg("guiHide");
         glow::window::hide(m_window.m_hwnd.get());
 
         return true;
     }
 
-    auto guiDestroy() noexcept -> void override { m_window.close(); }
+    auto guiDestroy() noexcept -> void override {
+        glow::system::dbg("guiDestroy");
+        glow::window::hide(m_window.m_hwnd.get());
+        glow::window::set_parent(m_window.m_hwnd.get(), m_window.dummyWindow.m_hwnd.get());
+        // glow::window::hide(m_window.dummyWindow.m_hwnd.get());
+
+        // m_window.close();
+    }
 
     auto guiGetPreferredApi(const char** /* api */,
                             bool* /* is_floating */) noexcept -> bool override {

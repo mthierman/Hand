@@ -33,13 +33,17 @@ struct Window final : glow::window::Window {
         });
 
         message(WM_DESTROY, [this](glow::messages::wm /* message */) {
-            webView.close();
-            webViewEnvironment.close();
+            glow::system::dbg("WM_DESTROY");
+            // webView.close();
+            // webViewEnvironment.close();
 
             return 0;
         });
+
+        create();
     }
 
+    glow::window::Window dummyWindow;
     glow::webview::WebViewEnvironment webViewEnvironment;
     glow::webview::WebView webView;
 };
