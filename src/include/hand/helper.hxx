@@ -86,8 +86,13 @@ template <typename T, typename U> struct Helper : public U {
     }
 
     auto guiSetParent(const clap_window* window) noexcept -> bool override {
+        glow::window::hide(m_window.m_hwnd.get());
         glow::window::set_style(m_window.m_hwnd.get(), WS_POPUP);
         glow::window::set_parent(m_window.m_hwnd.get(), (::HWND)window->win32);
+        glow::window::show(m_window.m_hwnd.get());
+        if (m_window.webView.m_controller) {
+            m_window.webView.m_controller->put_IsVisible(true);
+        }
 
         return true;
     }
@@ -107,6 +112,7 @@ template <typename T, typename U> struct Helper : public U {
     }
 
     auto guiDestroy() noexcept -> void override {
+        m_window.webView.m_controller->put_IsVisible(false);
         glow::system::dbg("guiDestroy");
         glow::window::hide(m_window.m_hwnd.get());
         glow::window::set_parent(m_window.m_hwnd.get(), m_window.dummyWindow.m_hwnd.get());

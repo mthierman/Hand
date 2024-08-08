@@ -40,7 +40,7 @@ struct Window final : glow::window::Window {
             return 0;
         });
 
-        create();
+        create("Test", false);
     }
 
     glow::window::Window dummyWindow;
