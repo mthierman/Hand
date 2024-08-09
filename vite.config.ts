@@ -5,11 +5,6 @@ import { CommonServerOptions, UserConfig, defineConfig } from "vite";
 const userConfig: UserConfig = {
     plugins: [react()],
     root: "gui",
-    resolve: {
-        alias: {
-            "~": resolve("gui/src"),
-        },
-    },
 };
 
 const commonServerOptions: CommonServerOptions = {
