@@ -6,11 +6,11 @@
 namespace hand {
 struct Window final : glow::window::Window {
     Window() {
-        webViewEnvironment.m_userDataFolder
-            = glow::filesystem::known_folder(FOLDERID_LocalAppData, { "template-clap-plugin" });
-
         message(WM_CREATE, [this](glow::messages::wm_create /* message */) {
             glow::window::set_position(m_hwnd.get(), 0, 0, 640, 480);
+
+            webViewEnvironment.m_userDataFolder
+                = glow::filesystem::known_folder(FOLDERID_LocalAppData, { "template-clap-plugin" });
 
             webViewEnvironment.create([this]() {
                 webView.create(webViewEnvironment, m_hwnd.get(), [this]() {
@@ -32,15 +32,7 @@ struct Window final : glow::window::Window {
             return 0;
         });
 
-        message(WM_DESTROY, [this](glow::messages::wm /* message */) {
-            glow::system::dbg("WM_DESTROY");
-            // webView.close();
-            // webViewEnvironment.close();
-
-            return 0;
-        });
-
-        create("Test", false);
+        create("WebView", false);
     }
 
     glow::window::Window dummyWindow;
