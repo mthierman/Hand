@@ -8,5 +8,7 @@ if(PROJECT_IS_TOP_LEVEL)
         "Examples"
         SOURCES
         "plugin.cxx"
+        FEATURES
+        "audio-effect"
         )
 endif()
