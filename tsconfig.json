@@ -1,5 +1,4 @@
 {
     "files": [],
-    "include": [],
-    "references": [{ "path": "tsconfig.node.json" }, { "path": "tsconfig.vite.json" }]
+    "references": [{ "path": "./gui" }, { "path": "tsconfig.node.json" }]
 }
