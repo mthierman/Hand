@@ -7,6 +7,7 @@ namespace hand {
 struct Window final : glow::window::Window {
     Window() {
         message(WM_CREATE, [this](glow::messages::wm_create /* message */) {
+            glow::window::set_style(m_hwnd.get(), WS_POPUP);
             glow::window::set_position(m_hwnd.get(), 0, 0, 640, 480);
 
             webViewEnvironment.m_userDataFolder
@@ -33,6 +34,20 @@ struct Window final : glow::window::Window {
         });
 
         create("WebView", false);
+    }
+
+    auto setParent(const clap_window* window) -> bool {
+        glow::window::set_parent(m_hwnd.get(), (::HWND)window->win32);
+        glow::window::show(m_hwnd.get());
+        webView.show();
+
+        return true;
+    }
+
+    auto destroy() -> void {
+        webView.hide();
+        glow::window::hide(m_hwnd.get());
+        glow::window::set_parent(m_hwnd.get(), nullptr);
     }
 
     glow::window::Window dummyWindow;
