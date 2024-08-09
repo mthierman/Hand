@@ -4,12 +4,13 @@ import { CommonServerOptions, UserConfig, defineConfig } from "vite";
 
 const userConfig: UserConfig = {
     plugins: [react()],
-    resolve: {
-        alias: {
-            components: resolve("src/components"),
-            css: resolve("src/css"),
-        },
-    },
+    root: "gui",
+    // resolve: {
+    //     alias: {
+    //         components: resolve("src/components"),
+    //         css: resolve("src/css"),
+    //     },
+    // },
 };
 
 const commonServerOptions: CommonServerOptions = {

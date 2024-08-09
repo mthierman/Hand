@@ -2,16 +2,15 @@
     "compilerOptions": {
         "composite": true,
         "target": "ESNext",
-        "jsx": "react-jsx",
         "module": "ESNext",
         "moduleResolution": "Bundler",
-        "baseUrl": "./",
-        "paths": {
-            "components/*": ["src/components/*"],
-            "css/*": ["src/css/*"]
-        },
         "types": ["vite/client"],
-        "allowImportingTsExtensions": true,
+        "jsx": "react-jsx",
+        // "baseUrl": "./",
+        // "paths": {
+        //     "components/*": ["src/components/*"],
+        //     "css/*": ["src/css/*"]
+        // },
         "resolveJsonModule": true,
         "noEmit": true,
         "isolatedModules": true,
