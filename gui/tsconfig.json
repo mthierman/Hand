@@ -6,11 +6,10 @@
         "moduleResolution": "Bundler",
         "types": ["vite/client"],
         "jsx": "react-jsx",
-        // "baseUrl": "./",
-        // "paths": {
-        //     "components/*": ["src/components/*"],
-        //     "css/*": ["src/css/*"]
-        // },
+        "baseUrl": "./",
+        "paths": {
+            "~/*": ["./src/*"]
+        },
         "resolveJsonModule": true,
         "noEmit": true,
         "isolatedModules": true,
