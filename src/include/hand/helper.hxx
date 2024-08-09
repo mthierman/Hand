@@ -88,7 +88,9 @@ template <typename T, typename U> struct Helper : public U {
     }
 
     auto guiSetParent(const clap_window* window) noexcept -> bool override {
-        return m_window.setParent(window);
+        m_window.setParent(window);
+
+        return true;
     }
 
     auto guiShow() noexcept -> bool override {

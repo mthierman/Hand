@@ -36,12 +36,10 @@ struct Window final : glow::window::Window {
         });
     }
 
-    auto setParent(const clap_window* window) -> bool {
+    auto setParent(const clap_window* window) -> void {
         glow::window::set_parent(m_hwnd.get(), static_cast<::HWND>(window->win32));
         glow::window::show(m_hwnd.get());
         webView.show();
-
-        return true;
     }
 
     auto destroy() -> void {
