@@ -11,21 +11,21 @@
         "preview": "vite preview"
     },
     "dependencies": {
-        "react-dom": "latest",
-        "react": "latest"
+        "react": "^18.3.1",
+        "react-dom": "^18.3.1"
     },
     "devDependencies": {
-        "@types/node": "latest",
-        "@types/react-dom": "latest",
-        "@types/react": "latest",
-        "@vitejs/plugin-react-swc": "latest",
-        "autoprefixer": "latest",
-        "postcss-load-config": "latest",
-        "postcss": "latest",
-        "prettier-plugin-tailwindcss": "latest",
-        "prettier": "latest",
-        "tailwindcss": "latest",
-        "typescript": "latest",
-        "vite": "latest"
+        "@types/node": "^22.1.0",
+        "@types/react": "^18.3.3",
+        "@types/react-dom": "^18.3.0",
+        "@vitejs/plugin-react-swc": "^3.7.0",
+        "autoprefixer": "^10.4.20",
+        "postcss": "^8.4.41",
+        "postcss-load-config": "^6.0.1",
+        "prettier": "^3.3.3",
+        "prettier-plugin-tailwindcss": "^0.6.5",
+        "tailwindcss": "^3.4.9",
+        "typescript": "^5.5.4",
+        "vite": "^5.4.0"
     }
 }
