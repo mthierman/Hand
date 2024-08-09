@@ -5,9 +5,6 @@ import { CommonServerOptions, UserConfig, defineConfig } from "vite";
 const userConfig: UserConfig = {
     plugins: [react()],
     root: "gui",
-    build: {
-        outDir: resolve(import.meta.dirname, "dist"),
-    },
 };
 
 const commonServerOptions: CommonServerOptions = {

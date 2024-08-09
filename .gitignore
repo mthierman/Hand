@@ -2,6 +2,7 @@
 .wix
 build
 dist
+gui/dist
 node_modules
 .vite
 
