@@ -50,7 +50,6 @@ struct Window final : glow::window::Window {
         glow::window::set_parent(m_hwnd.get(), nullptr);
     }
 
-    glow::window::Window dummyWindow;
     glow::webview::WebViewEnvironment webViewEnvironment;
     glow::webview::WebView webView;
 };
