@@ -1,6 +1,7 @@
 .vscode
 .wix
 build
+dist
 node_modules
 .vite
 
