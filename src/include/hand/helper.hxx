@@ -54,15 +54,15 @@ template <typename T, typename U> struct Helper : public U {
     }
 
     auto guiCreate(const char* /* api */, bool /* isFloating */) noexcept -> bool override {
-        if (!m_window) {
-            m_window = std::make_unique<Window>();
+        if (!m_window.initialized) {
+            m_window.create("WebView", false);
         }
 
         return true;
     }
 
     auto guiSetScale(double scale) noexcept -> bool override {
-        m_window->m_scale = scale;
+        m_window.m_scale = scale;
 
         return true;
     }
@@ -74,13 +74,13 @@ template <typename T, typename U> struct Helper : public U {
     }
 
     auto guiSetSize(uint32_t width, uint32_t height) noexcept -> bool override {
-        glow::window::set_position(m_window->m_hwnd.get(), 0, 0, width, height);
+        glow::window::set_position(m_window.m_hwnd.get(), 0, 0, width, height);
 
         return true;
     }
 
     auto guiGetSize(uint32_t* width, uint32_t* height) noexcept -> bool override {
-        auto rect { glow::window::get_client_rect(m_window->m_hwnd.get()) };
+        auto rect { glow::window::get_client_rect(m_window.m_hwnd.get()) };
         *width = rect.right - rect.left;
         *height = rect.bottom - rect.top;
 
@@ -88,22 +88,22 @@ template <typename T, typename U> struct Helper : public U {
     }
 
     auto guiSetParent(const clap_window* window) noexcept -> bool override {
-        return m_window->setParent(window);
+        return m_window.setParent(window);
     }
 
     auto guiShow() noexcept -> bool override {
-        glow::window::show(m_window->m_hwnd.get());
+        glow::window::show(m_window.m_hwnd.get());
 
         return true;
     }
 
     auto guiHide() noexcept -> bool override {
-        glow::window::hide(m_window->m_hwnd.get());
+        glow::window::hide(m_window.m_hwnd.get());
 
         return true;
     }
 
-    auto guiDestroy() noexcept -> void override { m_window->destroy(); }
+    auto guiDestroy() noexcept -> void override { m_window.destroy(); }
 
     auto guiGetPreferredApi(const char** /* api */,
                             bool* /* is_floating */) noexcept -> bool override {
@@ -142,6 +142,6 @@ template <typename T, typename U> struct Helper : public U {
     }
 
     std::unordered_map<clap_id, double*> m_params;
-    std::unique_ptr<Window> m_window;
+    Window m_window;
 };
 } // namespace hand

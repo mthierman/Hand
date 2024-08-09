@@ -24,6 +24,8 @@ struct Window final : glow::window::Window {
                 });
             });
 
+            initialized = true;
+
             return 0;
         });
 
@@ -32,8 +34,6 @@ struct Window final : glow::window::Window {
 
             return 0;
         });
-
-        create("WebView", false);
     }
 
     auto setParent(const clap_window* window) -> bool {
@@ -52,5 +52,6 @@ struct Window final : glow::window::Window {
 
     glow::webview::WebViewEnvironment webViewEnvironment;
     glow::webview::WebView webView;
+    bool initialized { false };
 };
 } // namespace hand
