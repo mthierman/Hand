@@ -36,13 +36,57 @@ struct Window final : glow::window::Window {
         });
     }
 
-    auto setParent(const clap_window* window) -> void {
+    auto guiCreate() noexcept -> bool {
+        if (!initialized) {
+            create("WebView", false);
+        }
+
+        return true;
+    }
+
+    auto guiSetScale(double scale) noexcept -> bool {
+        m_scale = scale;
+
+        return true;
+    }
+
+    auto guiSetSize(uint32_t width, uint32_t height) noexcept -> bool {
+        glow::window::set_position(
+            m_hwnd.get(), 0, 0, static_cast<int>(width), static_cast<int>(height));
+
+        return true;
+    }
+
+    auto guiGetSize(uint32_t* width, uint32_t* height) noexcept -> bool {
+        auto rect { glow::window::get_client_rect(m_hwnd.get()) };
+
+        *width = static_cast<uint32_t>(rect.right - rect.left);
+        *height = static_cast<uint32_t>(rect.bottom - rect.top);
+
+        return true;
+    }
+
+    auto guiSetParent(const clap_window* window) noexcept -> bool {
         glow::window::set_parent(m_hwnd.get(), static_cast<::HWND>(window->win32));
         glow::window::show(m_hwnd.get());
         webView.show();
+
+        return true;
     }
 
-    auto destroy() -> void {
+    auto guiShow() noexcept -> bool {
+        glow::window::show(m_hwnd.get());
+
+        return true;
+    }
+
+    auto guiHide() noexcept -> bool {
+        glow::window::hide(m_hwnd.get());
+
+        return true;
+    }
+
+    auto destroy() noexcept -> void {
         webView.hide();
         glow::window::hide(m_hwnd.get());
         glow::window::set_parent(m_hwnd.get(), nullptr);

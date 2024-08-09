@@ -54,18 +54,10 @@ template <typename T, typename U> struct Helper : public U {
     }
 
     auto guiCreate(const char* /* api */, bool /* isFloating */) noexcept -> bool override {
-        if (!m_window.initialized) {
-            m_window.create("WebView", false);
-        }
-
-        return true;
+        return m_window.guiCreate();
     }
 
-    auto guiSetScale(double scale) noexcept -> bool override {
-        m_window.m_scale = scale;
-
-        return true;
-    }
+    auto guiSetScale(double scale) noexcept -> bool override { return m_window.guiSetScale(scale); }
 
     auto guiCanResize() const noexcept -> bool override { return true; }
 
@@ -74,36 +66,20 @@ template <typename T, typename U> struct Helper : public U {
     }
 
     auto guiSetSize(uint32_t width, uint32_t height) noexcept -> bool override {
-        glow::window::set_position(m_window.m_hwnd.get(), 0, 0, width, height);
-
-        return true;
+        return m_window.guiSetSize(width, height);
     }
 
     auto guiGetSize(uint32_t* width, uint32_t* height) noexcept -> bool override {
-        auto rect { glow::window::get_client_rect(m_window.m_hwnd.get()) };
-        *width = rect.right - rect.left;
-        *height = rect.bottom - rect.top;
-
-        return true;
+        return m_window.guiGetSize(width, height);
     }
 
     auto guiSetParent(const clap_window* window) noexcept -> bool override {
-        m_window.setParent(window);
-
-        return true;
+        return m_window.guiSetParent(window);
     }
 
-    auto guiShow() noexcept -> bool override {
-        glow::window::show(m_window.m_hwnd.get());
+    auto guiShow() noexcept -> bool override { return m_window.guiShow(); }
 
-        return true;
-    }
-
-    auto guiHide() noexcept -> bool override {
-        glow::window::hide(m_window.m_hwnd.get());
-
-        return true;
-    }
+    auto guiHide() noexcept -> bool override { return m_window.guiHide(); }
 
     auto guiDestroy() noexcept -> void override { m_window.destroy(); }
 
