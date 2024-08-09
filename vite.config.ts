@@ -14,7 +14,6 @@ const userConfig: UserConfig = {
 };
 
 const commonServerOptions: CommonServerOptions = {
-    port: 8000,
     https: {
         pfx: resolve("../.cert/localhost.pfx"),
         passphrase: "localhost",
