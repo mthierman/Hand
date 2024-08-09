@@ -1,0 +1,31 @@
+{
+    "name": "hand",
+    "private": true,
+    "version": "0.0.0",
+    "type": "module",
+    "scripts": {
+        "dev": "vite",
+        "host": "vite --host",
+        "build": "vite build",
+        "watch": "vite build --watch",
+        "preview": "vite preview"
+    },
+    "dependencies": {
+        "react-dom": "latest",
+        "react": "latest"
+    },
+    "devDependencies": {
+        "@types/node": "latest",
+        "@types/react-dom": "latest",
+        "@types/react": "latest",
+        "@vitejs/plugin-react-swc": "latest",
+        "autoprefixer": "latest",
+        "postcss-load-config": "latest",
+        "postcss": "latest",
+        "prettier-plugin-tailwindcss": "latest",
+        "prettier": "latest",
+        "tailwindcss": "latest",
+        "typescript": "latest",
+        "vite": "latest"
+    }
+}
