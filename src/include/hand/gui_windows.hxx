@@ -24,8 +24,6 @@ struct Window final : glow::window::Window {
                 });
             });
 
-            initialized = true;
-
             return 0;
         });
 
@@ -37,9 +35,7 @@ struct Window final : glow::window::Window {
     }
 
     auto guiCreate() noexcept -> bool {
-        if (!initialized) {
-            create("WebView", false);
-        }
+        create("WebView", false);
 
         return true;
     }
@@ -68,8 +64,6 @@ struct Window final : glow::window::Window {
 
     auto guiSetParent(const clap_window* window) noexcept -> bool {
         glow::window::set_parent(m_hwnd.get(), static_cast<::HWND>(window->win32));
-        glow::window::show(m_hwnd.get());
-        webView.show();
 
         return true;
     }
@@ -86,14 +80,9 @@ struct Window final : glow::window::Window {
         return true;
     }
 
-    auto destroy() noexcept -> void {
-        webView.hide();
-        glow::window::hide(m_hwnd.get());
-        glow::window::set_parent(m_hwnd.get(), nullptr);
-    }
+    auto destroy() noexcept -> void { m_hwnd.reset(); }
 
     glow::webview::WebViewEnvironment webViewEnvironment;
     glow::webview::WebView webView;
-    bool initialized { false };
 };
 } // namespace hand
