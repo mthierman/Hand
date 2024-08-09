@@ -2,16 +2,23 @@
 
 #include <clap/factory/plugin-factory.h>
 
+#include <cstring>
 #include <functional>
+
+#include "descriptor.hxx"
 
 #ifndef CREATE_PLUGIN
 #define CREATE_PLUGIN(PluginStruct)                                                                \
     namespace hand::factory {                                                                      \
     auto create_plugin(const struct clap_plugin_factory* /* factory */,                            \
                        const clap_host* host,                                                      \
-                       const char* /* plugin_id */) -> const clap_plugin* {                        \
-        auto plugin { new PluginStruct(host) };                                                    \
-        return plugin->clapPlugin();                                                               \
+                       const char* plugin_id) -> const clap_plugin* {                              \
+        if (std::strcmp(plugin_id, hand::descriptor::id) == 0) {                                   \
+            auto plugin { new PluginStruct(host) };                                                \
+            return plugin->clapPlugin();                                                           \
+        } else {                                                                                   \
+            return nullptr;                                                                        \
+        }                                                                                          \
     }                                                                                              \
     } // namespace hand::factory
 #endif
