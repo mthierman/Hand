@@ -63,6 +63,7 @@ struct Window final : glow::window::Window {
     }
 
     auto guiSetParent(const clap_window* window) noexcept -> bool {
+        glow::window::set_style(m_hwnd.get(), WS_CHILD);
         glow::window::set_parent(m_hwnd.get(), static_cast<::HWND>(window->win32));
 
         return true;
