@@ -1,5 +1,5 @@
 if(PROJECT_IS_TOP_LEVEL)
-    hand_plugin(
+    hand_add_plugin(
         ID
         "com.examples.gui"
         NAME

@@ -2,98 +2,175 @@ cmake_minimum_required(VERSION 3.30)
 
 project(Hand VERSION 0.0.0)
 
+if(NOT
+   DEFINED
+   CMAKE_MSVC_RUNTIME_LIBRARY
+    )
+    set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>DLL")
+endif()
+
+if(NOT
+   DEFINED
+   CLAP_WRAPPER_CXX_STANDARD
+    )
+    set(CLAP_WRAPPER_CXX_STANDARD 17)
+endif()
+
+set(CMAKE_CXX_STANDARD ${CLAP_WRAPPER_CXX_STANDARD})
+
 include(cmake/deps.cmake)
 
-add_library(Hand)
+function(hand_add_plugin)
+    set(args
+        ID
+        NAME
+        VENDOR
+        URL
+        MANUAL_URL
+        SUPPORT_URL
+        VERSION
+        DESCRIPTION
+        )
+    set(listArgs
+        SOURCES
+        FEATURES
+        )
+    cmake_parse_arguments(
+        PLUGIN
+        ""
+        "${args}"
+        "${listArgs}"
+        ${ARGN}
+        )
 
-add_library(
-    hand::hand
-    ALIAS
-    Hand
-    )
+    if(NOT
+       PLUGIN_ID
+        )
+        message(FATAL_ERROR "Plugin ID is mandatory")
+    endif()
 
-target_sources(
-    Hand
-    INTERFACE "src/entry.cxx"
-    PRIVATE "src/factory.cxx"
-            "src/event.cxx"
-    PUBLIC FILE_SET
-           HEADERS
-           BASE_DIRS
-           "src/include"
-    )
+    if(NOT
+       PLUGIN_NAME
+        )
+        message(FATAL_ERROR "Plugin name is mandatory")
+    endif()
 
-target_link_libraries(
-    Hand
-    PUBLIC common::compile_features
-           common::link_options_lib
-           free-audio::clap
-           free-audio::clap-helpers
-    )
+    list(
+        TRANSFORM
+        PLUGIN_FEATURES
+        REPLACE "(.+)"
+                "\"\\1\""
+                OUTPUT_VARIABLE
+                PLUGIN_FEATURES
+        )
 
-target_compile_options(
-    Hand
-    PUBLIC $<$<CXX_COMPILER_ID:MSVC>:
-           /W4
-           /WX
-           /MP
-           /nologo
-           /wd4100
-           /wd4127
-           /utf-8
-           /bigobj
-           /diagnostics:caret
-           /Zc:__cplusplus
-           >
-           $<$<AND:$<CXX_COMPILER_ID:Clang>,$<CXX_COMPILER_FRONTEND_VARIANT:MSVC>>:
-           /W4
-           /WX
-           -Wno-braced-scalar-init
-           -Wno-extra-semi
-           -Wno-gnu-zero-variadic-macro-arguments
-           -Wno-language-extension-token
-           -Wno-microsoft-enum-value
-           -Wno-nonportable-include-path
-           -Wno-unused-parameter
-           >
-           $<$<AND:$<CXX_COMPILER_ID:Clang>,$<CXX_COMPILER_FRONTEND_VARIANT:GNU>>:
-           -Wall
-           -Werror
-           -Wno-braced-scalar-init
-           -Wno-extra-semi
-           -Wno-gnu-zero-variadic-macro-arguments
-           -Wno-language-extension-token
-           -Wno-microsoft-enum-value
-           -Wno-nonportable-include-path
-           -Wno-unused-parameter
-           >
-    )
+    list(
+        APPEND
+        PLUGIN_FEATURES
+        "static_cast<const char*>(nullptr)"
+        )
 
-target_compile_definitions(
-    Hand
-    PUBLIC $<$<CONFIG:Debug>:HOT_RELOAD=1>
-           DEV_URL="https://localhost:5173"
-    )
+    list(
+        JOIN
+        PLUGIN_FEATURES
+        ", "
+        PLUGIN_FEATURES
+        )
 
-if(CMAKE_SYSTEM_NAME
-   STREQUAL
-   "Windows"
-    )
-    target_link_libraries(
-        Hand
-        PUBLIC common::compile_definitions
-               glow::glow
+    configure_file(
+        "${CMAKE_CURRENT_FUNCTION_LIST_DIR}/config/descriptor.cxx"
+        "${CMAKE_CURRENT_BINARY_DIR}/config/descriptor.cxx"
+        )
+
+    add_library(${PLUGIN_NAME}_base STATIC)
+
+    target_sources(
+        ${PLUGIN_NAME}_base
+        PRIVATE ${PLUGIN_SOURCES}
+                "${CMAKE_CURRENT_BINARY_DIR}/config/descriptor.cxx"
+                "${CMAKE_CURRENT_FUNCTION_LIST_DIR}/src/factory.cxx"
+                "${CMAKE_CURRENT_FUNCTION_LIST_DIR}/src/event.cxx"
+        PUBLIC FILE_SET
+               HEADERS
+               BASE_DIRS
+               "${CMAKE_CURRENT_FUNCTION_LIST_DIR}/src/include"
         )
 
     target_compile_definitions(
-        Hand
-        PUBLIC PLATFORM_WINDOWS=1
-               OPERATING_SYSTEM="Windows"
+        ${PLUGIN_NAME}_base
+        PUBLIC $<$<CONFIG:Debug>:HOT_RELOAD=1>
+               DEV_URL="https://localhost:5173"
         )
-else()
-    target_sources(Hand PRIVATE "src/gui.cxx")
-endif()
 
-include(cmake/hand_plugin.cmake)
+    target_link_libraries(
+        ${PLUGIN_NAME}_base
+        PUBLIC common::compile_features
+               free-audio::clap
+               free-audio::clap-helpers
+        )
+
+    # target_compile_options( ${PLUGIN_NAME}_base PUBLIC $<$<CXX_COMPILER_ID:MSVC>: /W4 /WX /MP
+    # /nologo /wd4100 /wd4127 /utf-8 /bigobj /diagnostics:caret /Zc:__cplusplus >
+    # $<$<AND:$<CXX_COMPILER_ID:Clang>,$<CXX_COMPILER_FRONTEND_VARIANT:MSVC>>:
+    # /W4 /WX -Wno-braced-scalar-init -Wno-extra-semi -Wno-gnu-zero-variadic-macro-arguments
+    # -Wno-language-extension-token -Wno-microsoft-enum-value -Wno-nonportable-include-path
+    # -Wno-unused-parameter >
+    # $<$<AND:$<CXX_COMPILER_ID:Clang>,$<CXX_COMPILER_FRONTEND_VARIANT:GNU>>:
+    # -Wall -Werror -Wno-braced-scalar-init -Wno-extra-semi -Wno-gnu-zero-variadic-macro-arguments
+    # -Wno-language-extension-token -Wno-microsoft-enum-value -Wno-nonportable-include-path
+    # -Wno-unused-parameter > )
+
+    add_library(
+        ${PLUGIN_NAME}
+        MODULE
+        )
+
+    target_sources(${PLUGIN_NAME} PRIVATE "${CMAKE_CURRENT_FUNCTION_LIST_DIR}/src/entry.cxx")
+
+    target_link_libraries(${PLUGIN_NAME} PRIVATE ${PLUGIN_NAME}_base)
+
+    add_executable(${PLUGIN_NAME}_standalone)
+
+    target_sources(
+        ${PLUGIN_NAME}_standalone PRIVATE "${CMAKE_CURRENT_FUNCTION_LIST_DIR}/src/entry.cxx"
+        )
+
+    target_link_libraries(${PLUGIN_NAME}_standalone PRIVATE ${PLUGIN_NAME}_base)
+
+    target_add_standalone_wrapper(
+        TARGET
+        ${PLUGIN_NAME}_standalone
+        OUTPUT_NAME
+        ${PLUGIN_NAME}
+        STATICALLY_LINKED_CLAP_ENTRY
+        TRUE
+        PLUGIN_ID
+        ${PLUGIN_ID}
+        )
+
+    if(CMAKE_SYSTEM_NAME
+       STREQUAL
+       "Windows"
+        )
+        target_link_libraries(
+            ${PLUGIN_NAME}_base
+            PUBLIC common::compile_definitions
+                   common::link_options_lib
+                   glow::glow
+            )
+
+        target_compile_definitions(
+            ${PLUGIN_NAME}_base
+            PUBLIC PLATFORM_WINDOWS=1
+                   OPERATING_SYSTEM="Windows"
+            )
+
+        set_target_properties(
+            ${PLUGIN_NAME}
+            PROPERTIES SUFFIX
+                       ".clap"
+            )
+    endif()
+endfunction()
 
 add_subdirectory(examples)

@@ -23,3 +23,8 @@ fetch_clap_helpers(
     VERSION
     "main"
     )
+
+fetch_clap_wrapper(
+    VERSION
+    "main"
+    )
