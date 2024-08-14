@@ -82,7 +82,10 @@ function(hand_add_plugin)
         "${CMAKE_CURRENT_BINARY_DIR}/config/descriptor.cxx"
         )
 
-    add_library(${PLUGIN_NAME}_base STATIC)
+    add_library(
+        ${PLUGIN_NAME}_base
+        STATIC
+        )
 
     target_sources(
         ${PLUGIN_NAME}_base
