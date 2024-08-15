@@ -1,0 +1,14 @@
+if(PROJECT_IS_TOP_LEVEL)
+    hand_add_plugin(
+        ID
+        "com.examples.test"
+        NAME
+        "TestPlugin"
+        VENDOR
+        "Examples"
+        SOURCES
+        "plugin.cxx"
+        FEATURES
+        "audio-effect"
+        )
+endif()

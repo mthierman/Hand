@@ -16,6 +16,8 @@ if(NOT
     set(CLAP_WRAPPER_CXX_STANDARD 17)
 endif()
 
+# set(CMAKE_DEBUG_POSTFIX "d")
+
 set(CMAKE_CXX_STANDARD ${CLAP_WRAPPER_CXX_STANDARD})
 
 include(cmake/deps.cmake)
