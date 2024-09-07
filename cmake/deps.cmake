@@ -12,6 +12,11 @@ fetch_glow(
     "next"
     )
 
+fetch_choc(
+    VERSION
+    "webview-transparency"
+    )
+
 fetch_clap(
     VERSION
     "main"

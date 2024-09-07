@@ -10,7 +10,8 @@
 #include "descriptor.hxx"
 
 #if defined(PLATFORM_WINDOWS)
-#include "gui_windows.hxx"
+// #include "gui_windows.hxx"
+#include "gui_choc.hxx"
 #endif
 
 namespace hand {

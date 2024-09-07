@@ -18,7 +18,7 @@ endif()
 
 set(CLAP_WRAPPER_DONT_ADD_TARGETS ON)
 
-# set(CMAKE_DEBUG_POSTFIX "d")
+set(CMAKE_DEBUG_POSTFIX "")
 
 set(CMAKE_CXX_STANDARD ${CLAP_WRAPPER_CXX_STANDARD})
 
@@ -114,6 +114,7 @@ function(hand_add_plugin)
         PUBLIC common::compile_features
                free-audio::clap
                free-audio::clap-helpers
+               tracktion::choc
         )
 
     # target_compile_options( ${PLUGIN_NAME}_base PUBLIC $<$<CXX_COMPILER_ID:MSVC>: /W4 /WX /MP
