@@ -1,89 +1,75 @@
 #include <glow/filesystem.hxx>
 #include <glow/system.hxx>
-#include <glow/webview.hxx>
 #include <glow/window.hxx>
 
 namespace hand {
-struct Window final : glow::window::Window {
-    Window() {
-        message(WM_CREATE, [this](glow::messages::wm_create /* message */) {
-            glow::window::set_style(m_hwnd.get(), WS_POPUP);
-            glow::window::set_position(m_hwnd.get(), 0, 0, 640, 480);
+struct GUI {
+    struct WebView final : glow::window::WebView {
+        WebView() {
+            config.userDataFolder = glow::filesystem::known_folder() / L"template-clap-plugin";
 
-            webViewEnvironment.m_userDataFolder
-                = glow::filesystem::known_folder(FOLDERID_LocalAppData, { "template-clap-plugin" });
-
-            webViewEnvironment.create([this]() {
-                webView.create(webViewEnvironment, m_hwnd.get(), [this]() {
+            create([this]() {
+            //
 #if HOT_RELOAD
-                    webView.navigate(DEV_URL);
+                navigate(DEV_URL);
 #else
-                    webView.navigate("https://www.example.com/");
+                navigate("https://www.example.com/");
 #endif
-                    webView.put_bounds(m_hwnd.get());
-                });
             });
 
-            return 0;
-        });
+            set_position(glow::window::Position(0, 0, 640, 480));
+        }
+    };
 
-        message(WM_WINDOWPOSCHANGED, [this](glow::messages::wm_windowposchanged /* message */) {
-            webView.put_bounds(m_hwnd.get());
-
-            return 0;
-        });
-    }
-
-    auto guiCreate() noexcept -> bool {
-        create("WebView", false);
+    auto create() noexcept -> bool {
+        webView = std::make_unique<WebView>();
 
         return true;
     }
 
-    auto guiSetScale(double scale) noexcept -> bool {
-        m_scale = scale;
+    auto setScale(double scale) noexcept -> bool {
+        // webView->scale = scale;
+
+        return false;
+    }
+
+    auto setSize(uint32_t width, uint32_t height) noexcept -> bool {
+        webView->set_position(
+            glow::window::Position(0, 0, static_cast<int>(width), static_cast<int>(height)));
 
         return true;
     }
 
-    auto guiSetSize(uint32_t width, uint32_t height) noexcept -> bool {
-        glow::window::set_position(
-            m_hwnd.get(), 0, 0, static_cast<int>(width), static_cast<int>(height));
+    auto getSize(uint32_t* width, uint32_t* height) noexcept -> bool {
+        auto position { webView->client_position() };
+
+        *width = static_cast<uint32_t>(position.width);
+        *height = static_cast<uint32_t>(position.height);
 
         return true;
     }
 
-    auto guiGetSize(uint32_t* width, uint32_t* height) noexcept -> bool {
-        auto rect { glow::window::get_client_rect(m_hwnd.get()) };
-
-        *width = static_cast<uint32_t>(rect.right - rect.left);
-        *height = static_cast<uint32_t>(rect.bottom - rect.top);
+    auto setParent(const clap_window* window) noexcept -> bool {
+        webView->set_popup();
+        webView->set_parent(static_cast<::HWND>(window->win32));
 
         return true;
     }
 
-    auto guiSetParent(const clap_window* window) noexcept -> bool {
-        glow::window::set_style(m_hwnd.get(), WS_CHILD);
-        glow::window::set_parent(m_hwnd.get(), static_cast<::HWND>(window->win32));
+    auto show() noexcept -> bool {
+        webView->show();
 
         return true;
     }
 
-    auto guiShow() noexcept -> bool {
-        glow::window::show(m_hwnd.get());
+    auto hide() noexcept -> bool {
+        webView->hide();
 
         return true;
     }
 
-    auto guiHide() noexcept -> bool {
-        glow::window::hide(m_hwnd.get());
+    auto destroy() noexcept -> void { webView->hwnd.reset(); }
 
-        return true;
-    }
-
-    auto destroy() noexcept -> void { m_hwnd.reset(); }
-
-    glow::webview::WebViewEnvironment webViewEnvironment;
-    glow::webview::WebView webView;
+    std::unique_ptr<WebView> webView;
 };
 } // namespace hand

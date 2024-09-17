@@ -26,3 +26,5 @@ fetch_clap_wrapper(
     VERSION
     "main"
     )
+
+fetch_common()

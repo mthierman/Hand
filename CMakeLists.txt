@@ -22,7 +22,13 @@ set(CMAKE_DEBUG_POSTFIX "")
 
 set(CMAKE_CXX_STANDARD ${CLAP_WRAPPER_CXX_STANDARD})
 
-include(cmake/deps.cmake)
+list(
+    APPEND
+    CMAKE_MODULE_PATH
+    "${CMAKE_CURRENT_SOURCE_DIR}/cmake"
+    )
+
+include(Dependencies)
 
 function(hand_add_plugin)
     set(args
@@ -106,7 +112,7 @@ function(hand_add_plugin)
     target_compile_definitions(
         ${PLUGIN_NAME}_base
         PUBLIC $<$<CONFIG:Debug>:HOT_RELOAD=1>
-               DEV_URL="https://localhost:5173"
+               DEV_URL="http://localhost:5173"
         )
 
     target_link_libraries(

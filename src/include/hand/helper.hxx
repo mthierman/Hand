@@ -35,7 +35,7 @@ template <typename T, typename U> struct Helper : public U {
 
     // params
     auto paramsCount() const noexcept -> uint32_t override {
-        return static_cast<uint32_t>(m_params.size());
+        return static_cast<uint32_t>(params.size());
     }
 
     // gui
@@ -54,10 +54,10 @@ template <typename T, typename U> struct Helper : public U {
     }
 
     auto guiCreate(const char* /* api */, bool /* isFloating */) noexcept -> bool override {
-        return m_window.guiCreate();
+        return gui.create();
     }
 
-    auto guiSetScale(double scale) noexcept -> bool override { return m_window.guiSetScale(scale); }
+    auto guiSetScale(double scale) noexcept -> bool override { return gui.setScale(scale); }
 
     auto guiCanResize() const noexcept -> bool override { return true; }
 
@@ -66,22 +66,22 @@ template <typename T, typename U> struct Helper : public U {
     }
 
     auto guiSetSize(uint32_t width, uint32_t height) noexcept -> bool override {
-        return m_window.guiSetSize(width, height);
+        return gui.setSize(width, height);
     }
 
     auto guiGetSize(uint32_t* width, uint32_t* height) noexcept -> bool override {
-        return m_window.guiGetSize(width, height);
+        return gui.getSize(width, height);
     }
 
     auto guiSetParent(const clap_window* window) noexcept -> bool override {
-        return m_window.guiSetParent(window);
+        return gui.setParent(window);
     }
 
-    auto guiShow() noexcept -> bool override { return m_window.guiShow(); }
+    auto guiShow() noexcept -> bool override { return gui.show(); }
 
-    auto guiHide() noexcept -> bool override { return m_window.guiHide(); }
+    auto guiHide() noexcept -> bool override { return gui.hide(); }
 
-    auto guiDestroy() noexcept -> void override { m_window.destroy(); }
+    auto guiDestroy() noexcept -> void override { gui.destroy(); }
 
     auto guiGetPreferredApi(const char** /* api */,
                             bool* /* is_floating */) noexcept -> bool override {
@@ -119,7 +119,7 @@ template <typename T, typename U> struct Helper : public U {
         return true;
     }
 
-    std::unordered_map<clap_id, double*> m_params;
-    Window m_window;
+    std::unordered_map<clap_id, double*> params;
+    GUI gui;
 };
 } // namespace hand
