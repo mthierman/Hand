@@ -7,12 +7,7 @@ const userConfig: UserConfig = {
     root: "gui",
 };
 
-const commonServerOptions: CommonServerOptions = {
-    https: {
-        pfx: resolve("../.cert/localhost.pfx"),
-        passphrase: "localhost",
-    },
-};
+const commonServerOptions: CommonServerOptions = {};
 
 // https://vitejs.dev/config/
 export default defineConfig(({ command }) => {
