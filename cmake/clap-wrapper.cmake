@@ -1,6 +1,6 @@
 FetchContent_Declare(
     free-audio_clap-wrapper
-    URL "https://github.com/free-audio/clap-wrapper/archive/refs/heads/main.zip"
+    URL "https://github.com/free-audio/clap-wrapper/archive/refs/heads/next.zip"
     DOWNLOAD_NO_PROGRESS TRUE
     )
 

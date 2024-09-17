@@ -131,16 +131,46 @@ function(hand_add_plugin)
                free-audio::clap-helpers
         )
 
-    # target_compile_options( ${PLUGIN_NAME}_base PUBLIC $<$<CXX_COMPILER_ID:MSVC>: /W4 /WX /MP
-    # /nologo /wd4100 /wd4127 /utf-8 /bigobj /diagnostics:caret /Zc:__cplusplus >
-    # $<$<AND:$<CXX_COMPILER_ID:Clang>,$<CXX_COMPILER_FRONTEND_VARIANT:MSVC>>:
-    # /W4 /WX -Wno-braced-scalar-init -Wno-extra-semi -Wno-gnu-zero-variadic-macro-arguments
-    # -Wno-language-extension-token -Wno-microsoft-enum-value -Wno-nonportable-include-path
-    # -Wno-unused-parameter >
-    # $<$<AND:$<CXX_COMPILER_ID:Clang>,$<CXX_COMPILER_FRONTEND_VARIANT:GNU>>:
-    # -Wall -Werror -Wno-braced-scalar-init -Wno-extra-semi -Wno-gnu-zero-variadic-macro-arguments
-    # -Wno-language-extension-token -Wno-microsoft-enum-value -Wno-nonportable-include-path
-    # -Wno-unused-parameter > )
+    target_compile_options(
+        ${PLUGIN_NAME}_base
+        PUBLIC $<$<CXX_COMPILER_ID:MSVC>:
+               /MP
+               /utf-8
+               /bigobj
+               /diagnostics:caret
+               /Zc:__cplusplus
+               >
+               $<$<CXX_COMPILER_FRONTEND_VARIANT:MSVC>:
+               /W4
+               /WX
+               /wd4100
+               /wd4127
+               >
+               $<$<CXX_COMPILER_FRONTEND_VARIANT:GNU>:
+               -Wall
+               -Werror
+               >
+        PUBLIC $<$<CXX_COMPILER_ID:Clang>:
+               -Wno-braced-scalar-init
+               -Wno-extra-semi
+               -Wno-gnu-zero-variadic-macro-arguments
+               -Wno-language-extension-token
+               -Wno-microsoft-enum-value
+               -Wno-nonportable-include-path
+               -Wno-unused-parameter
+               >
+        )
+
+    target_link_options(
+        ${PLUGIN_NAME}_base
+        PUBLIC
+        $<$<CXX_COMPILER_FRONTEND_VARIANT:MSVC>:
+        /WX
+        >
+        $<$<CXX_COMPILER_FRONTEND_VARIANT:GNU>:
+        -Wl,/WX
+        >
+        )
 
     add_library(
         ${PLUGIN_NAME}
@@ -175,44 +205,6 @@ function(hand_add_plugin)
        "Windows"
         )
         target_link_libraries(${PLUGIN_NAME}_base PUBLIC glow::glow)
-
-        target_compile_options(
-            ${PLUGIN_NAME}_base
-            PUBLIC $<$<CXX_COMPILER_ID:MSVC>:
-                   /W4
-                   /WX
-                   /MP
-                   /nologo
-                   /utf-8
-                   /bigobj
-                   /diagnostics:caret
-                   /Zc:__cplusplus
-                   >
-                   $<$<AND:$<CXX_COMPILER_ID:Clang>,$<CXX_COMPILER_FRONTEND_VARIANT:MSVC>>:
-                   /W4
-                   /WX
-                   >
-                   $<$<AND:$<CXX_COMPILER_ID:Clang>,$<CXX_COMPILER_FRONTEND_VARIANT:GNU>>:
-                   -Wall
-                   -Werror
-                   >
-            )
-
-        target_link_options(
-            ${PLUGIN_NAME}_base
-            PUBLIC
-            $<$<CXX_COMPILER_ID:MSVC>:
-            /WX
-            /NOLOGO
-            >
-            $<$<AND:$<CXX_COMPILER_ID:Clang>,$<CXX_COMPILER_FRONTEND_VARIANT:MSVC>>:
-            /WX
-            /NOLOGO
-            >
-            $<$<AND:$<CXX_COMPILER_ID:Clang>,$<CXX_COMPILER_FRONTEND_VARIANT:GNU>>:
-            -Wl,/WX,/NOLOGO
-            >
-            )
 
         target_compile_definitions(
             ${PLUGIN_NAME}_base
