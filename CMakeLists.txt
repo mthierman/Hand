@@ -28,7 +28,11 @@ list(
     "${CMAKE_CURRENT_SOURCE_DIR}/cmake"
     )
 
-include(Dependencies)
+include(FetchContent)
+include(clap)
+include(clap-helpers)
+include(clap-wrapper)
+include(Glow)
 
 function(hand_add_plugin)
     set(args
@@ -97,6 +101,12 @@ function(hand_add_plugin)
         STATIC
         )
 
+    target_compile_features(
+        ${PLUGIN_NAME}_base
+        PUBLIC c_std_17
+               cxx_std_23
+        )
+
     target_sources(
         ${PLUGIN_NAME}_base
         PRIVATE ${PLUGIN_SOURCES}
@@ -117,8 +127,7 @@ function(hand_add_plugin)
 
     target_link_libraries(
         ${PLUGIN_NAME}_base
-        PUBLIC common::compile_features
-               free-audio::clap
+        PUBLIC free-audio::clap
                free-audio::clap-helpers
         )
 
@@ -165,11 +174,44 @@ function(hand_add_plugin)
        STREQUAL
        "Windows"
         )
-        target_link_libraries(
+        target_link_libraries(${PLUGIN_NAME}_base PUBLIC glow::glow)
+
+        target_compile_options(
             ${PLUGIN_NAME}_base
-            PUBLIC common::compile_definitions
-                   common::link_options_lib
-                   glow::glow
+            PUBLIC $<$<CXX_COMPILER_ID:MSVC>:
+                   /W4
+                   /WX
+                   /MP
+                   /nologo
+                   /utf-8
+                   /bigobj
+                   /diagnostics:caret
+                   /Zc:__cplusplus
+                   >
+                   $<$<AND:$<CXX_COMPILER_ID:Clang>,$<CXX_COMPILER_FRONTEND_VARIANT:MSVC>>:
+                   /W4
+                   /WX
+                   >
+                   $<$<AND:$<CXX_COMPILER_ID:Clang>,$<CXX_COMPILER_FRONTEND_VARIANT:GNU>>:
+                   -Wall
+                   -Werror
+                   >
+            )
+
+        target_link_options(
+            ${PLUGIN_NAME}_base
+            PUBLIC
+            $<$<CXX_COMPILER_ID:MSVC>:
+            /WX
+            /NOLOGO
+            >
+            $<$<AND:$<CXX_COMPILER_ID:Clang>,$<CXX_COMPILER_FRONTEND_VARIANT:MSVC>>:
+            /WX
+            /NOLOGO
+            >
+            $<$<AND:$<CXX_COMPILER_ID:Clang>,$<CXX_COMPILER_FRONTEND_VARIANT:GNU>>:
+            -Wl,/WX,/NOLOGO
+            >
             )
 
         target_compile_definitions(

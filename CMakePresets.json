@@ -1,0 +1,144 @@
+{
+    "$schema": "https://raw.githubusercontent.com/Kitware/CMake/master/Help/manual/presets/schema.json",
+    "version": 9,
+    "cmakeMinimumRequired": {
+        "major": 3,
+        "minor": 30,
+        "patch": 0
+    },
+    "configurePresets": [
+        {
+            "name": "Visual Studio 17 2022",
+            "hidden": true,
+            "generator": "Visual Studio 17 2022",
+            "architecture": {
+                "strategy": "set",
+                "value": "x64"
+            }
+        },
+        {
+            "name": "Ninja Multi-Config",
+            "hidden": true,
+            "generator": "Ninja Multi-Config"
+        },
+        {
+            "name": "MSBuild: MSVC",
+            "inherits": ["Visual Studio 17 2022"],
+            "toolset": {
+                "strategy": "set",
+                "value": "host=x64"
+            },
+            "binaryDir": "${sourceDir}/build/Visual Studio 17 2022/MSVC"
+        },
+        {
+            "name": "MSBuild: ClangCL",
+            "inherits": ["Visual Studio 17 2022"],
+            "toolset": {
+                "strategy": "set",
+                "value": "ClangCL,host=x64"
+            },
+            "binaryDir": "${sourceDir}/build/Visual Studio 17 2022/ClangCL"
+        },
+        {
+            "name": "Ninja: MSVC",
+            "inherits": ["Ninja Multi-Config"],
+            "cacheVariables": {
+                "CMAKE_C_COMPILER": "cl",
+                "CMAKE_CXX_COMPILER": "cl"
+            },
+            "binaryDir": "${sourceDir}/build/Ninja Multi-Config/MSVC"
+        },
+        {
+            "name": "Ninja: ClangCL",
+            "inherits": ["Ninja Multi-Config"],
+            "cacheVariables": {
+                "CMAKE_C_COMPILER": "clang-cl",
+                "CMAKE_CXX_COMPILER": "clang-cl"
+            },
+            "binaryDir": "${sourceDir}/build/Ninja Multi-Config/ClangCL"
+        },
+        {
+            "name": "Ninja: Clang",
+            "inherits": ["Ninja Multi-Config"],
+            "cacheVariables": {
+                "CMAKE_C_COMPILER": "clang",
+                "CMAKE_CXX_COMPILER": "clang++"
+            },
+            "binaryDir": "${sourceDir}/build/Ninja Multi-Config/Clang"
+        },
+        {
+            "name": "Unity Build",
+            "hidden": true,
+            "cacheVariables": {
+                "CMAKE_UNITY_BUILD": {
+                    "type": "BOOL",
+                    "value": "ON"
+                }
+            }
+        }
+    ],
+    "buildPresets": [
+        {
+            "name": "MSBuild Options",
+            "hidden": true,
+            "nativeToolOptions": [
+                "/p:UseMultiToolTask=true",
+                "/p:EnforceProcessCountAcrossBuilds=true"
+            ]
+        },
+        {
+            "name": "MSVC Debug",
+            "inherits": ["MSBuild Options"],
+            "configuration": "Debug",
+            "configurePreset": "MSBuild: MSVC"
+        },
+        {
+            "name": "MSVC Release",
+            "inherits": ["MSBuild Options"],
+            "configuration": "Release",
+            "configurePreset": "MSBuild: MSVC"
+        },
+        {
+            "name": "ClangCL Debug",
+            "inherits": ["MSBuild Options"],
+            "configuration": "Debug",
+            "configurePreset": "MSBuild: ClangCL"
+        },
+        {
+            "name": "ClangCL Release",
+            "inherits": ["MSBuild Options"],
+            "configuration": "Release",
+            "configurePreset": "MSBuild: ClangCL"
+        },
+        {
+            "name": "Ninja MSVC Debug",
+            "configuration": "Debug",
+            "configurePreset": "Ninja: MSVC"
+        },
+        {
+            "name": "Ninja MSVC Release",
+            "configuration": "Release",
+            "configurePreset": "Ninja: MSVC"
+        },
+        {
+            "name": "Ninja ClangCL Debug",
+            "configuration": "Debug",
+            "configurePreset": "Ninja: ClangCL"
+        },
+        {
+            "name": "Ninja ClangCL Release",
+            "configuration": "Release",
+            "configurePreset": "Ninja: ClangCL"
+        },
+        {
+            "name": "Ninja Clang Debug",
+            "configuration": "Debug",
+            "configurePreset": "Ninja: Clang"
+        },
+        {
+            "name": "Ninja Clang Release",
+            "configuration": "Release",
+            "configurePreset": "Ninja: Clang"
+        }
+    ]
+}
