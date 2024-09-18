@@ -111,6 +111,7 @@ function(hand_add_plugin)
         ${PLUGIN_NAME}_base
         PRIVATE ${PLUGIN_SOURCES}
                 "${CMAKE_CURRENT_BINARY_DIR}/config/descriptor.cxx"
+                "${CMAKE_CURRENT_FUNCTION_LIST_DIR}/src/helper.cxx"
                 "${CMAKE_CURRENT_FUNCTION_LIST_DIR}/src/factory.cxx"
                 "${CMAKE_CURRENT_FUNCTION_LIST_DIR}/src/event.cxx"
         PUBLIC FILE_SET
