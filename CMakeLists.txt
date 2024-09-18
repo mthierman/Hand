@@ -205,6 +205,12 @@ function(hand_add_plugin)
        STREQUAL
        "Windows"
         )
+        target_sources(
+            ${PLUGIN_NAME}_base
+            PRIVATE "${CMAKE_CURRENT_FUNCTION_LIST_DIR}/src/platform/windows/dll_main.cxx"
+                    "${CMAKE_CURRENT_FUNCTION_LIST_DIR}/src/platform/windows/gui.cxx"
+            )
+
         target_link_libraries(${PLUGIN_NAME}_base PUBLIC glow::glow)
 
         target_compile_definitions(
