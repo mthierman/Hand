@@ -1,6 +1,8 @@
 #include <hand/helper.hxx>
 
 namespace hand {
+glow::message::Hook hook;
+
 auto Helper::guiIsApiSupported(const char* api, bool isFloating) noexcept -> bool {
     if (isFloating) {
         return false;
@@ -17,8 +19,6 @@ auto Helper::guiIsApiSupported(const char* api, bool isFloating) noexcept -> boo
 
 auto Helper::guiCreate(const char* /* api */, bool /* isFloating */) noexcept -> bool {
     webView.config.userDataFolder = glow::filesystem::known_folder() / L"template-clap-plugin";
-
-    webView.background_style(glow::window::Background::Style::Transparent);
 
     webView.create([this]() {
     // webView.core->add_NavigationCompleted(
@@ -43,6 +43,16 @@ auto Helper::guiCreate(const char* /* api */, bool /* isFloating */) noexcept ->
     }, false);
 
     webView.set_position(glow::window::Position(0, 0, 640, 480));
+
+    hook.windows.insert(webView.hwnd.get());
+
+    hook.messages.on(WM_SETTINGCHANGE, [this](glow::message::wm::SETTINGCHANGE /* message */) {
+        for (auto window : hook.windows) {
+            ::RedrawWindow(window, nullptr, nullptr, RDW_ERASE | RDW_INVALIDATE | RDW_ERASENOW);
+        }
+
+        return 0;
+    });
 
     return true;
 }

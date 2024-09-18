@@ -49,11 +49,6 @@ struct Helper : public clap::helpers::Plugin<clap::helpers::MisbehaviourHandler:
 
 #if defined(PLATFORM_WINDOWS)
     glow::window::WebView webView;
-    ::HHOOK hook;
-
-    static auto CALLBACK call_window_procedure(int code,
-                                               ::WPARAM wparam,
-                                               ::LPARAM lparam) -> ::LRESULT;
 #endif
     std::unordered_map<clap_id, double*> params;
 };
