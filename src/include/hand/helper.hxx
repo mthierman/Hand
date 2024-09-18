@@ -49,6 +49,7 @@ struct Helper : public clap::helpers::Plugin<clap::helpers::MisbehaviourHandler:
 
 #if defined(PLATFORM_WINDOWS)
     glow::window::WebView webView;
+    glow::window::Overlapped hiddenWindow;
 #endif
     std::unordered_map<clap_id, double*> params;
 };
