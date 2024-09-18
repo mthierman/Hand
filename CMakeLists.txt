@@ -227,4 +227,6 @@ function(hand_add_plugin)
     endif()
 endfunction()
 
-add_subdirectory(examples)
+if(PROJECT_IS_TOP_LEVEL)
+    add_subdirectory(examples)
+endif()

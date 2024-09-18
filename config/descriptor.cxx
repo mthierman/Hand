@@ -10,7 +10,7 @@ const char* manual_url { "@PLUGIN_MANUAL_URL@" };
 const char* support_url { "@PLUGIN_SUPPORT_URL@" };
 const char* version { "@PLUGIN_VERSION@" };
 const char* description { "@PLUGIN_DESCRIPTION@" };
-const std::vector<const char*> features { @PLUGIN_FEATURES @ };
+const std::vector<const char*> features { @PLUGIN_FEATURES@ };
 const clap_plugin_descriptor clap_descriptor { .clap_version { CLAP_VERSION },
                                                .id { id },
                                                .name { name },

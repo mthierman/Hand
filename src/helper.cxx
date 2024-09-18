@@ -7,15 +7,15 @@ Helper::Helper(const clap_host* host)
                                                                    host) { }
 
 // params
-auto Helper::paramsCount() const noexcept -> uint32_t override {
+auto Helper::paramsCount() const noexcept -> uint32_t {
     return static_cast<uint32_t>(params.size());
 }
 
 // audio ports
-auto Helper::audioPortsCount(bool /* isInput */) const noexcept -> uint32_t override { return 1; }
+auto Helper::audioPortsCount(bool /* isInput */) const noexcept -> uint32_t { return 1; }
 auto Helper::audioPortsInfo(uint32_t index,
                             bool /* isInput */,
-                            clap_audio_port_info* info) const noexcept -> bool override {
+                            clap_audio_port_info* info) const noexcept -> bool {
     if (index > 0)
         return false;
     info->id = 0;
@@ -28,10 +28,10 @@ auto Helper::audioPortsInfo(uint32_t index,
 }
 
 // note ports
-auto Helper::notePortsCount(bool /* isInput */) const noexcept -> uint32_t override { return 1; }
+auto Helper::notePortsCount(bool /* isInput */) const noexcept -> uint32_t { return 1; }
 auto Helper::notePortsInfo(uint32_t index,
                            bool /* isInput */,
-                           clap_note_port_info* info) const noexcept -> bool override {
+                           clap_note_port_info* info) const noexcept -> bool {
     if (index > 0)
         return false;
     info->id = 0;
