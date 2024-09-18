@@ -3,6 +3,8 @@
 #include <glow/window.hxx>
 
 namespace hand {
+::HWND messageHwnd;
+
 struct GUI {
     struct WebView final : glow::window::WebView {
         WebView() {
@@ -18,6 +20,37 @@ struct GUI {
             });
 
             set_position(glow::window::Position(0, 0, 640, 480));
+
+            messageHwnd = hwnd.get();
+
+            hook = ::SetWindowsHookExW(WH_CALLWNDPROC,
+                                       call_window_procedure,
+                                       glow::system::instance(),
+                                       ::GetCurrentThreadId());
+        }
+
+        ~WebView() { ::UnhookWindowsHookEx(hook); }
+
+        ::HHOOK hook;
+
+        static auto CALLBACK call_window_procedure(int code,
+                                                   ::WPARAM wparam,
+                                                   ::LPARAM lparam) -> ::LRESULT {
+            auto cwp { reinterpret_cast<::CWPSTRUCT*>(lparam) };
+            // auto fromCurrentThread { wparam != 0 };
+
+            if (code < 0) {
+                return ::CallNextHookEx(nullptr, code, wparam, lparam);
+            } else {
+                if (cwp) {
+                    if (cwp->message == WM_SETTINGCHANGE) {
+                        // std::cout << "WM_SETTINGCHANGE" << std::endl;
+                        ::SendMessageW(messageHwnd, WM_SETTINGCHANGE, 0, 0);
+                    }
+                }
+
+                return ::CallNextHookEx(nullptr, code, wparam, lparam);
+            }
         }
     };
 
