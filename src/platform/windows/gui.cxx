@@ -1,6 +1,27 @@
 #include <hand/helper.hxx>
 
 namespace hand {
+::HWND messageHwnd;
+auto CALLBACK Helper::call_window_procedure(int code,
+                                            ::WPARAM wparam,
+                                            ::LPARAM lparam) -> ::LRESULT {
+    auto cwp { reinterpret_cast<::CWPSTRUCT*>(lparam) };
+
+    if (code < 0) {
+        return ::CallNextHookEx(nullptr, code, wparam, lparam);
+    } else {
+        if (cwp && cwp->message == WM_SETTINGCHANGE
+            && ::CompareStringOrdinal(
+                reinterpret_cast<wchar_t*>(cwp->lParam), -1, L"ImmersiveColorSet", -1, true)) {
+            std::cout << "WM_SETTINGCHANGE: " << glow::text::to_string((wchar_t*)cwp->lParam)
+                      << std::endl;
+            ::SendMessageW(messageHwnd, WM_SETTINGCHANGE, 0, 0);
+        }
+
+        return ::CallNextHookEx(nullptr, code, wparam, lparam);
+    }
+}
+
 auto Helper::guiIsApiSupported(const char* api, bool isFloating) noexcept -> bool {
     if (isFloating) {
         return false;
@@ -16,62 +37,75 @@ auto Helper::guiIsApiSupported(const char* api, bool isFloating) noexcept -> boo
 }
 
 auto Helper::guiCreate(const char* /* api */, bool /* isFloating */) noexcept -> bool {
-    // return gui.create();
+    webView.config.userDataFolder = glow::filesystem::known_folder() / L"template-clap-plugin";
 
-    return false;
+    webView.create([this]() {
+    //
+#if HOT_RELOAD
+        webView.navigate(DEV_URL);
+#else
+        webView.navigate("https://www.example.com/");
+#endif
+    });
+
+    webView.set_position(glow::window::Position(0, 0, 640, 480));
+
+    messageHwnd = webView.hwnd.get();
+
+    hook = ::SetWindowsHookExW(
+        WH_CALLWNDPROC, call_window_procedure, glow::system::instance(), ::GetCurrentThreadId());
+
+    return true;
 }
 
 auto Helper::guiSetScale(double scale) noexcept -> bool {
-    // return gui.setScale(scale);
+    // webView.scale = scale;
 
     return false;
 }
 
-auto Helper::guiCanResize() const noexcept -> bool {
-    // return true;
-
-    return false;
-}
+auto Helper::guiCanResize() const noexcept -> bool { return true; }
 
 auto Helper::guiAdjustSize(uint32_t* width, uint32_t* height) noexcept -> bool {
-    // return guiSetSize(*width, *height);
-
-    return false;
+    return guiSetSize(*width, *height);
 }
 
 auto Helper::guiSetSize(uint32_t width, uint32_t height) noexcept -> bool {
-    // return gui.setSize(width, height);
+    webView.set_position(
+        glow::window::Position(0, 0, static_cast<int>(width), static_cast<int>(height)));
 
-    return false;
+    return true;
 }
 
 auto Helper::guiGetSize(uint32_t* width, uint32_t* height) noexcept -> bool {
-    // return gui.getSize(width, height);
+    auto position { webView.client_position() };
 
-    return false;
+    *width = static_cast<uint32_t>(position.width);
+    *height = static_cast<uint32_t>(position.height);
+
+    return true;
 }
 
 auto Helper::guiSetParent(const clap_window* window) noexcept -> bool {
-    // return gui.setParent(window);
+    webView.set_popup();
+    webView.set_parent(static_cast<::HWND>(window->win32));
 
-    return false;
+    return true;
 }
 
 auto Helper::guiShow() noexcept -> bool {
-    // return gui.show();
+    webView.show();
 
-    return false;
+    return true;
 }
 
 auto Helper::guiHide() noexcept -> bool {
-    // return gui.hide();
+    webView.hide();
 
-    return false;
+    return true;
 }
 
-auto Helper::guiDestroy() noexcept -> void {
-    // gui.destroy();
-}
+auto Helper::guiDestroy() noexcept -> void { webView.close(); }
 
 auto Helper::guiGetPreferredApi(const char** /* api */, bool* /* is_floating */) noexcept -> bool {
     return false;

@@ -9,6 +9,10 @@
 
 #include "descriptor.hxx"
 
+#if defined(PLATFORM_WINDOWS)
+#include <glow/glow.hxx>
+#endif
+
 namespace hand {
 struct Helper : public clap::helpers::Plugin<clap::helpers::MisbehaviourHandler::Terminate,
                                              clap::helpers::CheckingLevel::Maximal> {
@@ -43,6 +47,14 @@ struct Helper : public clap::helpers::Plugin<clap::helpers::MisbehaviourHandler:
                        bool /* isInput */,
                        clap_note_port_info* info) const noexcept -> bool override;
 
+#if defined(PLATFORM_WINDOWS)
+    glow::window::WebView webView;
+    ::HHOOK hook;
+
+    static auto CALLBACK call_window_procedure(int code,
+                                               ::WPARAM wparam,
+                                               ::LPARAM lparam) -> ::LRESULT;
+#endif
     std::unordered_map<clap_id, double*> params;
 };
 } // namespace hand
