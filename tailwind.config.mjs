@@ -9,5 +9,5 @@ export default {
             mono: ["ui-monospace", "monospace", "emoji"],
         },
     },
-    darkMode: "selector",
+    // darkMode: "selector",
 };

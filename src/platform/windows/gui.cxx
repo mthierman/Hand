@@ -18,7 +18,23 @@ auto Helper::guiIsApiSupported(const char* api, bool isFloating) noexcept -> boo
 auto Helper::guiCreate(const char* /* api */, bool /* isFloating */) noexcept -> bool {
     webView.config.userDataFolder = glow::filesystem::known_folder() / L"template-clap-plugin";
 
+    webView.background_style(glow::window::Background::Style::Transparent);
+
     webView.create([this]() {
+    // webView.core->add_NavigationCompleted(
+    //     webView.event.handler<ICoreWebView2NavigationCompletedEventHandler>(
+    //         [this](ICoreWebView2* /* sender */,
+    //                ICoreWebView2NavigationCompletedEventArgs* /* args */) {
+    //     // webView.show();
+
+    //     webView.show_controller();
+    //     webView.put_bounds(webView.client_position());
+    //     std::cout << "NavigationCompleted" << std::endl;
+
+    //     return S_OK;
+    // }),
+    //     webView.event.token("NavigationCompleted"));
+
 #if HOT_RELOAD
         webView.navigate(DEV_URL);
 #else
