@@ -1,27 +1,6 @@
 #include <hand/helper.hxx>
 
 namespace hand {
-::HWND messageHwnd;
-auto CALLBACK Helper::call_window_procedure(int code,
-                                            ::WPARAM wparam,
-                                            ::LPARAM lparam) -> ::LRESULT {
-    auto cwp { reinterpret_cast<::CWPSTRUCT*>(lparam) };
-
-    if (code < 0) {
-        return ::CallNextHookEx(nullptr, code, wparam, lparam);
-    } else {
-        if (cwp && cwp->message == WM_SETTINGCHANGE
-            && ::CompareStringOrdinal(
-                reinterpret_cast<wchar_t*>(cwp->lParam), -1, L"ImmersiveColorSet", -1, true)) {
-            std::cout << "WM_SETTINGCHANGE: " << glow::text::to_string((wchar_t*)cwp->lParam)
-                      << std::endl;
-            ::SendMessageW(messageHwnd, WM_SETTINGCHANGE, 0, 0);
-        }
-
-        return ::CallNextHookEx(nullptr, code, wparam, lparam);
-    }
-}
-
 auto Helper::guiIsApiSupported(const char* api, bool isFloating) noexcept -> bool {
     if (isFloating) {
         return false;
@@ -40,20 +19,14 @@ auto Helper::guiCreate(const char* /* api */, bool /* isFloating */) noexcept ->
     webView.config.userDataFolder = glow::filesystem::known_folder() / L"template-clap-plugin";
 
     webView.create([this]() {
-    //
 #if HOT_RELOAD
         webView.navigate(DEV_URL);
 #else
-        webView.navigate("https://www.example.com/");
+        webView.navigate("http://localhost:5173/");
 #endif
-    });
+    }, false);
 
     webView.set_position(glow::window::Position(0, 0, 640, 480));
-
-    messageHwnd = webView.hwnd.get();
-
-    hook = ::SetWindowsHookExW(
-        WH_CALLWNDPROC, call_window_procedure, glow::system::instance(), ::GetCurrentThreadId());
 
     return true;
 }
