@@ -31,7 +31,7 @@ using IgnoreNone = clap::helpers::Plugin<clap::helpers::MisbehaviourHandler::Ign
 namespace hand {
 template <typename T, typename U> struct Helper : public U {
     Helper(const clap_host* host)
-        : U(&clap_descriptor, host) { }
+        : U(&descriptor::clap_descriptor, host) { }
 
     // params
     auto paramsCount() const noexcept -> uint32_t override {

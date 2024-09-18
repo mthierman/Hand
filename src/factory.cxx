@@ -7,7 +7,7 @@ namespace factory {
 
     auto get_plugin_descriptor(const clap_plugin_factory* /* factory */,
                                uint32_t /* index */) -> const clap_plugin_descriptor* {
-        return &hand::clap_descriptor;
+        return &hand::descriptor::clap_descriptor;
     }
 } // namespace factory
 
