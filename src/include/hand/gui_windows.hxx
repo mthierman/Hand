@@ -37,16 +37,19 @@ struct GUI {
                                                    ::WPARAM wparam,
                                                    ::LPARAM lparam) -> ::LRESULT {
             auto cwp { reinterpret_cast<::CWPSTRUCT*>(lparam) };
-            // auto fromCurrentThread { wparam != 0 };
 
             if (code < 0) {
                 return ::CallNextHookEx(nullptr, code, wparam, lparam);
             } else {
-                if (cwp) {
-                    if (cwp->message == WM_SETTINGCHANGE) {
-                        // std::cout << "WM_SETTINGCHANGE" << std::endl;
-                        ::SendMessageW(messageHwnd, WM_SETTINGCHANGE, 0, 0);
-                    }
+                if (cwp && cwp->message == WM_SETTINGCHANGE
+                    && ::CompareStringOrdinal(reinterpret_cast<wchar_t*>(cwp->lParam),
+                                              -1,
+                                              L"ImmersiveColorSet",
+                                              -1,
+                                              true)) {
+                    std::cout << "WM_SETTINGCHANGE: "
+                              << glow::text::to_string((wchar_t*)cwp->lParam) << std::endl;
+                    ::SendMessageW(messageHwnd, WM_SETTINGCHANGE, 0, 0);
                 }
 
                 return ::CallNextHookEx(nullptr, code, wparam, lparam);
