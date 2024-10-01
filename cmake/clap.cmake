@@ -1,6 +1,6 @@
 FetchContent_Declare(
     free-audio_clap
-    URL "https://github.com/free-audio/clap/archive/refs/tags/1.2.1.zip"
+    URL "https://github.com/free-audio/clap/archive/refs/tags/1.2.2.zip"
     DOWNLOAD_NO_PROGRESS TRUE
     SOURCE_SUBDIR
     "NULL"
